@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,9 +54,14 @@ class Lieux
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sorties", mappedBy="lieu")
+     * @ORM\OneToMany(targetEntity="App\Entity\Sorties", mappedBy="lieu", cascade={remove})
      */
     private $listeSorties;
+
+    public function __construct()
+    {
+        $this->listeSorties = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -138,20 +144,25 @@ class Lieux
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
-    public function getListeSorties()
+    public function getListeSorties(): ArrayCollection
     {
         return $this->listeSorties;
     }
 
     /**
-     * @param mixed $listeSorties
+     * @param ArrayCollection $listeSorties
      */
-    public function setListeSorties($listeSorties): void
+    public function setListeSorties(ArrayCollection $listeSorties): void
     {
         $this->listeSorties = $listeSorties;
     }
+
+    /**
+     * @return mixed
+     */
+
 
 
 }
