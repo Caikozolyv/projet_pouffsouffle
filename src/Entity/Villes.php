@@ -17,6 +17,7 @@ class Villes
      */
     private $id;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -24,13 +25,13 @@ class Villes
 
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $nomVille;
 
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $codePostal;
 
