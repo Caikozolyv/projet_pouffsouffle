@@ -15,20 +15,67 @@ class Sortie
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    //test push
+
     private $idSortie;
 
+    /**
+     * @ORM\Column(type="string", length=150)
+     */
+
     private $name;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+
     private $dateHeureDebut;
+
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     */
+
     private $durée;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+
     private $dateLimiteInscription;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+
     private $nbInscriptionMax;
+
+    /**
+     * @ORM\Column(type="string", length=300)
+     */
+
     private $infosSortie;
+
+    /**
+     * @ORM\Column(type="string", length=150)
+     */
+
     private $etat;
 
+    /**
+     * @return mixed
+     */
     public function getIdSortie()
     {
-        return $this->id;
+        return $this->idSortie;
+    }
+
+    /**
+     * @param mixed $idSortie
+     * @return Sortie
+     */
+    public function setIdSortie($idSortie)
+    {
+        $this->idSortie = $idSortie;
+        return $this;
     }
 
     /**
@@ -52,7 +99,6 @@ class Sortie
     /**
      * @return mixed
      */
-
     public function getDateHeureDebut()
     {
         return $this->dateHeureDebut;
@@ -157,6 +203,8 @@ class Sortie
         $this->etat = $etat;
         return $this;
     }
+
+
 
 
 
