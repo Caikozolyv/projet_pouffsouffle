@@ -24,23 +24,25 @@ class Lieux
 
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $nomLieu;
 
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $rue;
 
+
     /**
-     * @var float
+     * @ORM\Column(type="float")
      */
     private $latitude;
 
+
     /**
-     * @var float
+     * @ORM\Column(type="float")
      */
     private $longitude;
 
