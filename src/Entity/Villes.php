@@ -25,15 +25,20 @@ class Villes
 
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private $nomVille;
 
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private $codePostal;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Lieux", mappedBy="ville", cascade={remove})
+     */
+    private $lieux ;
 
 }
