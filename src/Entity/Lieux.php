@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\LieuxRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,25 +23,25 @@ class Lieux
 
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(name="nom_lieu", type="string", length=50)
      */
     private $nomLieu;
 
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(name="rue", type="string", length=50)
      */
     private $rue;
 
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(name="latitude", type="float")
      */
     private $latitude;
 
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(name="longitude", type="float")
      */
     private $longitude;
 
@@ -51,6 +50,108 @@ class Lieux
      * @ORM\ManyToOne(targetEntity="App\Entity\Villes", inversedBy="lieux")
      */
     private $ville;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Sorties", mappedBy="lieu")
+     */
+    private $listeSorties;
+
+    /**
+     * @return mixed
+     */
+    public function getNomLieu()
+    {
+        return $this->nomLieu;
+    }
+
+    /**
+     * @param mixed $nomLieu
+     */
+    public function setNomLieu($nomLieu): void
+    {
+        $this->nomLieu = $nomLieu;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRue()
+    {
+        return $this->rue;
+    }
+
+    /**
+     * @param mixed $rue
+     */
+    public function setRue($rue): void
+    {
+        $this->rue = $rue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param mixed $latitude
+     */
+    public function setLatitude($latitude): void
+    {
+        $this->latitude = $latitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param mixed $longitude
+     */
+    public function setLongitude($longitude): void
+    {
+        $this->longitude = $longitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+
+    /**
+     * @param mixed $ville
+     */
+    public function setVille($ville): void
+    {
+        $this->ville = $ville;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListeSorties()
+    {
+        return $this->listeSorties;
+    }
+
+    /**
+     * @param mixed $listeSorties
+     */
+    public function setListeSorties($listeSorties): void
+    {
+        $this->listeSorties = $listeSorties;
+    }
 
 
 }
