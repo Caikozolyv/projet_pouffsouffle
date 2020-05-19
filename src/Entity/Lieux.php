@@ -24,13 +24,13 @@ class Lieux
 
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private $nomLieu;
 
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private $rue;
 
@@ -45,5 +45,12 @@ class Lieux
      * @ORM\Column(type="float")
      */
     private $longitude;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Villes", inversedBy="lieux")
+     */
+    private $ville;
+
 
 }
