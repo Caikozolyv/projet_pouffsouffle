@@ -61,6 +61,30 @@ class Sortie
     private $etat;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lieux", inversedBy="lieux")
+     */
+    private $lieux;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
+     */
+    private $campus;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="etat")
+     */
+    private $etat_sortie;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="participant")
+     */
+    private $participant;
+
+
+    /**
      * @return mixed
      */
     public function getIdSortie()

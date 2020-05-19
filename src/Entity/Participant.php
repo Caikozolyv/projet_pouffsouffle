@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,6 +63,25 @@ class Participant
      * @ORM\Column(type="boolean")
      */
     private $actif;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="participant")
+     */
+    private $listeSorties;
+
+    public function __construct()
+    {
+        $this->listeSorties = new ArrayCollection();
+        $this->listeParticipants = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="partipant")
+     */
+
+    private $listeParticipants;
+
+
 
     public function getIdparticipant(): ?int
     {
