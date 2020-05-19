@@ -1,0 +1,12 @@
+Index: readme.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>test git phpstorm ! Emeline test numéro 3.
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- readme.txt	(revision 665b11b724cc553db31f797c771f5dffbea3517a)
++++ readme.txt	(date 1589873908285)
+@@ -1,1 +1,0 @@
+-test git phpstorm ! Emeline test numéro 3.
+\ No newline at end of file
