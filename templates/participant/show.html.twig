@@ -3,20 +3,16 @@
 {% block title %}Participant{% endblock %}
 
 {% block body %}
-    <h1>Participant</h1>
+    <h1>Mon Profil</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>IdParticipant</th>
-                <td>{{ participant.idParticipant }}</td>
-            </tr>
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>
             </tr>
             <tr>
-                <th>Prenom</th>
+                <th>Prénom</th>
                 <td>{{ participant.prenom }}</td>
             </tr>
             <tr>
@@ -30,14 +26,6 @@
             <tr>
                 <th>MotPasse</th>
                 <td>{{ participant.motPasse }}</td>
-            </tr>
-            <tr>
-                <th>Administrateur</th>
-                <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Actif</th>
-                <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
