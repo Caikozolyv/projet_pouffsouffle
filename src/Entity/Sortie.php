@@ -64,20 +64,20 @@ class Sortie
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="listeSorties")
-     * @ORM\JoinColumn(name="lieu_id", referencedColumnName="idLieu", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id_lieu")
      */
     private $lieu;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
-     * @ORM\JoinColumn(name="campus_id", referencedColumnName="idCampus")
+     * @ORM\JoinColumn(referencedColumnName="id_campus")
      */
     private $campus;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="listeSortiesOrga")
-     * @ORM\JoinColumn(name="participant_id", referencedColumnName="idparticipant")
+     * @ORM\JoinColumn(referencedColumnName="id_participant")
      */
     private $organisateur;
 

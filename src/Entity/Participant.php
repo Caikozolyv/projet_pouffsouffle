@@ -20,7 +20,7 @@ class Participant
      * @ORM\Id()
      * @ORM\GeneratedValue()
      */
-    private $idparticipant;
+    private $idParticipant;
 
     /**
      * @ORM\Column(type="string", length=150)
@@ -75,7 +75,7 @@ class Participant
 
     /**
      * @ORM\ManyToONe(targetEntity="App\Entity\Campus", inversedBy="listeParticipants")
-     * @ORM\JoinColumn(name="participant_campus_id", referencedColumnName="idCampus")
+     * @ORM\JoinColumn(referencedColumnName="id_campus")
      */
     private $campus;
 
@@ -129,9 +129,9 @@ class Participant
 
 
 
-    public function getIdparticipant(): ?int
+    public function getIdParticipant(): ?int
     {
-        return $this->idparticipant;
+        return $this->idParticipant;
     }
 
     public function getNom(): ?string
