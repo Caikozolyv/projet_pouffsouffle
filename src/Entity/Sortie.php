@@ -70,7 +70,7 @@ class Sortie
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="listeSorties")
      * @ORM\JoinColumn(referencedColumnName="id_campus")
      */
     private $campus;
