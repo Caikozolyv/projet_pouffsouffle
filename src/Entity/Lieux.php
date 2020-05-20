@@ -17,12 +17,6 @@ class Lieux
      */
     private $idLieux;
 
-    public function getId(): ?int
-    {
-        return $this->idLieux;
-    }
-
-
     /**
      * @ORM\Column(name="nom_lieu", type="string", length=50)
      */
@@ -63,6 +57,13 @@ class Lieux
         $this->listeSorties = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getIdLieux()
+    {
+        return $this->idLieux;
+    }
 
     /**
      * @return mixed
@@ -159,11 +160,4 @@ class Lieux
     {
         $this->listeSorties = $listeSorties;
     }
-
-    /**
-     * @return mixed
-     */
-
-
-
 }
