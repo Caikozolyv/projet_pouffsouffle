@@ -5,12 +5,13 @@ namespace App\Entity;
 use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="participant")
- * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\ParticipantRepository")
  */
-class Participant
+class Participant implements UserInterface
 {
 
     /**
@@ -216,5 +217,28 @@ class Participant
         $this->actif = $actif;
 
         return $this;
+    }
+
+    public function getRoles()
+    {
+        return ["ROLE_USER"];
+    }
+
+    public function getPassword()
+    {
+        return $this->motPasse;
+    }
+
+    public function getSalt()
+    {
+    }
+
+    public function getUsername()
+    {
+        return $this->mail;
+    }
+
+    public function eraseCredentials()
+    {
     }
 }
