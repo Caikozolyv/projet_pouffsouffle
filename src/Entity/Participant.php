@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,14 +38,14 @@ class Participant implements UserInterface
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
      */
-    private $mail;
+    private $username;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="motPasse", type="string", length=255)
      */
-    private $motPasse;
+    private $password;
 
     /**
      * @ORM\Column(type="boolean")
@@ -171,26 +170,26 @@ class Participant implements UserInterface
         return $this;
     }
 
-    public function getMail(): ?string
+    public function getUsername(): ?string
     {
-        return $this->mail;
+        return $this->username;
     }
 
-    public function setMail(string $mail): self
+    public function setUsername(string $username): self
     {
-        $this->mail = $mail;
+        $this->username = $username;
 
         return $this;
     }
 
-    public function getMotPasse(): ?string
+    public function getPassword(): ?string
     {
-        return $this->motPasse;
+        return $this->password;
     }
 
-    public function setMotPasse(string $motPasse): self
+    public function setPassword(string $password): self
     {
-        $this->motPasse = $motPasse;
+        $this->password = $password;
 
         return $this;
     }
@@ -224,18 +223,8 @@ class Participant implements UserInterface
         return ["ROLE_USER"];
     }
 
-    public function getPassword()
-    {
-        return $this->motPasse;
-    }
-
     public function getSalt()
     {
-    }
-
-    public function getUsername()
-    {
-        return $this->mail;
     }
 
     public function eraseCredentials()
