@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ParticipantController extends AbstractController
 {
+
     /**
      * @Route("/", name="participant_index", methods={"GET"})
      */
@@ -23,6 +24,14 @@ class ParticipantController extends AbstractController
         return $this->render('participant/index.html.twig', [
             'participants' => $participantRepository->findAll(),
         ]);
+    }
+
+    /**
+     * @Route("/login", name="login")
+     */
+    public function login()
+    {
+        return $this->render('participant/login.html.twig', []);
     }
 
     /**
@@ -91,4 +100,6 @@ class ParticipantController extends AbstractController
 
         return $this->redirectToRoute('participant_index');
     }
+
+
 }
