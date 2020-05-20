@@ -1,20 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ParticipantController!{% endblock %}
+{% block title %}Participant index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Participant index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdParticipant</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Telephone</th>
+                <th>Mail</th>
+                <th>MotPasse</th>
+                <th>Administrateur</th>
+                <th>Actif</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for participant in participants %}
+            <tr>
+                <td>{{ participant.idParticipant }}</td>
+                <td>{{ participant.nom }}</td>
+                <td>{{ participant.prenom }}</td>
+                <td>{{ participant.telephone }}</td>
+                <td>{{ participant.mail }}</td>
+                <td>{{ participant.motPasse }}</td>
+                <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
+                <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('participant_show', {'idParticipant': participant.idParticipant}) }}">show</a>
+                    <a href="{{ path('participant_edit', {'idParticipant': participant.idParticipant}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/sortir_dot_com/src/Controller/ParticipantController.php'|file_link(0) }}">src/Controller/ParticipantController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/sortir_dot_com/templates/participant/index.html.twig'|file_link(0) }}">templates/participant/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('participant_new') }}">Create new</a>
 {% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Etat{% endblock %}
+
+{% block body %}
+    <h1>Etat</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>IdEtat</th>
+                <td>{{ etat.idEtat }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ etat.libelle }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('etat_index') }}">back to list</a>
+
+    <a href="{{ path('etat_edit', {'idEtat': etat.idEtat}) }}">edit</a>
+
+    {{ include('etat/_delete_form.html.twig') }}
+{% endblock %}
