@@ -30,7 +30,7 @@ class Etat
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="etat")
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="sortie")
      */
     private $listeSorties;
     public function __construct()

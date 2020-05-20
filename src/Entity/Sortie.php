@@ -56,6 +56,7 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
      */
 
     private $etat;
@@ -67,7 +68,7 @@ class Sortie
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
+     *
      */
     private $campus;
 

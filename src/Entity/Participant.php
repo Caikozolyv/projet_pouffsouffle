@@ -65,7 +65,7 @@ class Participant
     private $actif;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="participant")
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="sortie")
      */
     private $listeSorties;
 
