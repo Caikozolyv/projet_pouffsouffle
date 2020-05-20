@@ -91,6 +91,10 @@ class Campus
         $this->listeParticipants = $listeParticipants;
     }
 
+    public function __toString()
+    {
+        return $this->nom;
+    }
 
 
 }
