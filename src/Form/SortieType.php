@@ -3,7 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Sortie;
+use App\Entity\Lieu;
+use App\Entity\Campus;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,17 +17,45 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', TextType::class, [
+                'label' => "Nom de la sortie : "
+            ])
+
             ->add('dateHeureDebut')
-            ->add('duree')
+
             ->add('dateLimiteInscription')
-            ->add('nbInscriptionMax')
-            ->add('infosSortie')
-            ->add('etat')
+
+            ->add('nbInscriptionMax', IntegerType::class, [
+                'label' => "Nombre de places : "
+            ])
+
+            ->add('duree', IntegerType::class, [
+                'label' => "Durée : "
+            ])
+
+            ->add('infosSortie', TextareaType::class, [
+                'label' =>"Description et infos : ",
+                'attr' => [
+                    'class' => 'overview-txt'
+                ]
+            ])
+
+            ->add('campus', TextType::class, [
+                'label' => "Campus"
+            ])
+
+            ->add('ville')
+
             ->add('lieu')
-            ->add('campus')
-            ->add('organisateur')
-            ->add('listeParticipants')
+
+            //->add('rue')
+
+            //->add('codePostal')
+
+            //->add('latitude')
+
+            //->add('longitude')
+
         ;
     }
 
