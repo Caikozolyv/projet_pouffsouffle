@@ -30,6 +30,11 @@ class Participant implements UserInterface
     /**
      * @ORM\Column(type="string", length=150)
      */
+    private $username;
+
+    /**
+     * @ORM\Column(type="string", length=150)
+     */
     private $prenom;
 
     /**
@@ -40,7 +45,7 @@ class Participant implements UserInterface
     /**
      * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
      */
-    private $username;
+    private $mail;
 
     /**
      * @ORM\Column(name="motPasse", type="string", length=255)
@@ -125,6 +130,22 @@ class Participant implements UserInterface
     public function setCampus($campus): void
     {
         $this->campus = $campus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @param mixed $mail
+     */
+    public function setMail($mail): void
+    {
+        $this->mail = $mail;
     }
 
 
