@@ -42,7 +42,7 @@ class Lieu
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Villes", inversedBy="lieux")
+     * @ORM\ManyToOne(targetEntity="Ville.php", inversedBy="lieux")
      */
     private $ville;
 
