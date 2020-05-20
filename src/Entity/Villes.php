@@ -38,7 +38,7 @@ class Villes
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Lieux", mappedBy="ville", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Lieu", mappedBy="ville", cascade={"remove"})
      */
     private $lieux;
 

@@ -75,6 +75,7 @@ class Participant
 
     /**
      * @ORM\ManyToONe(targetEntity="App\Entity\Campus", inversedBy="listeParticipants")
+     * @ORM\JoinColumn(name="participant_campus_id", referencedColumnName="idCampus")
      */
     private $campus;
 

@@ -63,18 +63,21 @@ class Sortie
     private $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Lieux", inversedBy="listeSorties")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="listeSorties")
+     * @ORM\JoinColumn(name="lieu_id", referencedColumnName="idLieu", nullable=true)
      */
-    private $lieux;
+    private $lieu;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
+     * @ORM\JoinColumn(name="campus_id", referencedColumnName="idCampus")
      */
     private $campus;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="listeSortiesOrga")
+     * @ORM\JoinColumn(name="participant_id", referencedColumnName="idparticipant")
      */
     private $organisateur;
 
@@ -91,17 +94,17 @@ class Sortie
     /**
      * @return mixed
      */
-    public function getLieux()
+    public function getLieu()
     {
-        return $this->lieux;
+        return $this->lieu;
     }
 
     /**
-     * @param mixed $lieux
+     * @param mixed $lieu
      */
-    public function setLieux($lieux): void
+    public function setLieu($lieu): void
     {
-        $this->lieux = $lieux;
+        $this->lieu = $lieu;
     }
 
     /**

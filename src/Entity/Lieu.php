@@ -6,16 +6,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=LieuxRepository::class)
+ * @ORM\Entity(repositoryClass=LieuRepository::class)
  */
-class Lieux
+class Lieu
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $idLieux;
+    private $idLieu;
 
     /**
      * @ORM\Column(name="nom_lieu", type="string", length=50)
@@ -48,7 +48,7 @@ class Lieux
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="lieux", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="lieu")
      */
     private $listeSorties;
 
@@ -60,10 +60,11 @@ class Lieux
     /**
      * @return mixed
      */
-    public function getIdLieux()
+    public function getIdLieu()
     {
-        return $this->idLieux;
+        return $this->idLieu;
     }
+
 
     /**
      * @return mixed
