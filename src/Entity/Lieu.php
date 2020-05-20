@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=LieuRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\LieuRepository")
  */
 class Lieu
 {
