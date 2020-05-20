@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,7 +34,7 @@ class Sortie
      * @ORM\Column(type="time", nullable=true)
      */
 
-    private $duree;
+    private $durée;
 
     /**
      * @ORM\Column(type="date")
@@ -57,118 +56,33 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=150)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="listeSorties")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
      */
 
     private $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Lieux", inversedBy="listeSorties")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lieux", inversedBy="lieux")
      */
     private $lieux;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="campus")
+     *
      */
     private $campus;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="listeSortiesOrga")
-     */
-    private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", mappedBy="listeSortiesDuParticipant")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="etat")
      */
-    private $listeParticipants;
+    private $etat_sortie;
 
-    public function __construct()
-    {
-        $this->listeParticipants = new ArrayCollection();
-    }
 
     /**
-     * @return mixed
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="participant")
      */
-    public function getDuree()
-    {
-        return $this->duree;
-    }
-
-    /**
-     * @param mixed $duree
-     */
-    public function setDuree($duree): void
-    {
-        $this->duree = $duree;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLieux()
-    {
-        return $this->lieux;
-    }
-
-    /**
-     * @param mixed $lieux
-     */
-    public function setLieux($lieux): void
-    {
-        $this->lieux = $lieux;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCampus()
-    {
-        return $this->campus;
-    }
-
-    /**
-     * @param mixed $campus
-     */
-    public function setCampus($campus): void
-    {
-        $this->campus = $campus;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrganisateur()
-    {
-        return $this->organisateur;
-    }
-
-    /**
-     * @param mixed $organisateur
-     */
-    public function setOrganisateur($organisateur): void
-    {
-        $this->organisateur = $organisateur;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getListeParticipants(): ArrayCollection
-    {
-        return $this->listeParticipants;
-    }
-
-    /**
-     * @param ArrayCollection $listeParticipants
-     */
-    public function setListeParticipants(ArrayCollection $listeParticipants): void
-    {
-        $this->listeParticipants = $listeParticipants;
-    }
-
-
+    private $participant;
 
 
     /**

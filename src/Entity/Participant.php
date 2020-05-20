@@ -43,6 +43,13 @@ class Participant
     private $mail;
 
     /**
+     * @Assert\Length(
+     *     min="1", max="30",
+     *     minMessage="Veuillez entrer {{ limit }} caractères minimum.",
+     *     maxMessage="Veuillez entrer {{ limit }} caractères maximum"
+     * )
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $motPasse;
@@ -58,73 +65,21 @@ class Participant
     private $actif;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="organisateur")
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="sortie")
      */
-    private $listeSortiesOrga;
+    private $listeSorties;
 
     public function __construct()
     {
-        $this->listeSortiesOrga = new ArrayCollection();
+        $this->listeSorties = new ArrayCollection();
+        $this->listeParticipants = new ArrayCollection();
     }
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="listeParticipants")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="partipant")
      */
 
-    private $listeSortiesDuParticipant;
-
-    /**
-     * @ORM\ManyToONe(targetEntity="App\Entity\Campus", inversedBy="listeParticipants")
-     */
-    private $campus;
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getListeSortiesOrga(): ArrayCollection
-    {
-        return $this->listeSortiesOrga;
-    }
-
-    /**
-     * @param ArrayCollection $listeSortiesOrga
-     */
-    public function setListeSortiesOrga(ArrayCollection $listeSortiesOrga): void
-    {
-        $this->listeSortiesOrga = $listeSortiesOrga;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getListeSortiesDuParticipant()
-    {
-        return $this->listeSortiesDuParticipant;
-    }
-
-    /**
-     * @param mixed $listeSortiesDuParticipant
-     */
-    public function setListeSortiesDuParticipant($listeSortiesDuParticipant): void
-    {
-        $this->listeSortiesDuParticipant = $listeSortiesDuParticipant;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCampus()
-    {
-        return $this->campus;
-    }
-
-    /**
-     * @param mixed $campus
-     */
-    public function setCampus($campus): void
-    {
-        $this->campus = $campus;
-    }
+    private $listeParticipants;
 
 
 
