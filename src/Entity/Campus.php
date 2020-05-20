@@ -16,11 +16,6 @@ class Campus
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $idCampus;
 
     /**
@@ -30,12 +25,12 @@ class Campus
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sorties", mappedBy="campus")
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="campus")
      */
     private $listeSorties;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Participants", mappedBy="campus")
+     * @ORM\OneToMany(targetEntity="App\Entity\Participant", mappedBy="campus")
      */
     private $listeParticipants;
 
@@ -48,20 +43,9 @@ class Campus
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getIdCampus(): ?int
-    {
         return $this->idCampus;
     }
 
-    public function setIdCampus(int $idCampus): self
-    {
-        $this->idCampus = $idCampus;
-
-        return $this;
-    }
 
     public function getNom(): ?string
     {

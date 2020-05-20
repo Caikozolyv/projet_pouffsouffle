@@ -16,11 +16,7 @@ class Etat
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $idEtat;
 
     /**
@@ -30,7 +26,7 @@ class Etat
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="etat")
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="sortie")
      */
     private $listeSorties;
     public function __construct()
@@ -38,23 +34,28 @@ class Etat
         $this->listeSorties = new ArrayCollection();
     }
 
-
-    public function getId(): ?int
+    /**
+     * @return ArrayCollection
+     */
+    public function getListeSorties(): ArrayCollection
     {
-        return $this->id;
+        return $this->listeSorties;
     }
 
-    public function getIdEtat(): ?int
+    /**
+     * @param ArrayCollection $listeSorties
+     */
+    public function setListeSorties(ArrayCollection $listeSorties): void
+    {
+        $this->listeSorties = $listeSorties;
+    }
+
+
+    public function getId(): ?int
     {
         return $this->idEtat;
     }
 
-    public function setIdEtat(int $idEtat): self
-    {
-        $this->idEtat = $idEtat;
-
-        return $this;
-    }
 
     public function getLibelle(): ?string
     {

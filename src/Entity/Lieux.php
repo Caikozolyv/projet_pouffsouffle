@@ -15,11 +15,11 @@ class Lieux
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private $idLieux;
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->idLieux;
     }
 
 
@@ -54,7 +54,7 @@ class Lieux
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sorties", mappedBy="lieu", cascade={remove})
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="lieux", cascade={"remove"})
      */
     private $listeSorties;
 
@@ -62,6 +62,7 @@ class Lieux
     {
         $this->listeSorties = new ArrayCollection();
     }
+
 
     /**
      * @return mixed
