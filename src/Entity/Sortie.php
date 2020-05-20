@@ -91,22 +91,6 @@ class Sortie
     /**
      * @return mixed
      */
-    public function getDuree()
-    {
-        return $this->duree;
-    }
-
-    /**
-     * @param mixed $duree
-     */
-    public function setDuree($duree): void
-    {
-        $this->duree = $duree;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getLieux()
     {
         return $this->lieux;
@@ -168,25 +152,12 @@ class Sortie
         $this->listeParticipants = $listeParticipants;
     }
 
-
-
-
     /**
      * @return mixed
      */
     public function getIdSortie()
     {
         return $this->idSortie;
-    }
-
-    /**
-     * @param mixed $idSortie
-     * @return Sortie
-     */
-    public function setIdSortie($idSortie)
-    {
-        $this->idSortie = $idSortie;
-        return $this;
     }
 
     /**
@@ -228,18 +199,18 @@ class Sortie
     /**
      * @return mixed
      */
-    public function getDurée()
+    public function getDuree()
     {
-        return $this->durée;
+        return $this->duree;
     }
 
     /**
-     * @param mixed $durée
+     * @param mixed $duree
      * @return Sortie
      */
-    public function setDurée($durée)
+    public function setDuree($duree)
     {
-        $this->durée = $durée;
+        $this->duree = $duree;
         return $this;
     }
 
