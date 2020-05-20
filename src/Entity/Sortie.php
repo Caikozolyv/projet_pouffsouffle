@@ -82,7 +82,10 @@ class Sortie
     private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", mappedBy="listeSortiesDuParticipant")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="listeSortiesDuParticipant")
+     * @ORM\JoinTable(name="sorties_participants",
+     *     joinColumns={@ORM\JoinColumn(referencedColumnName="id_sortie")},
+     *     inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="id_participant")})
      */
     private $listeParticipants;
 
