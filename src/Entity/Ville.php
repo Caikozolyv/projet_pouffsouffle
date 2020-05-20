@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\VillesRepository;
+use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=VillesRepository::class)
+ * @ORM\Entity(repositoryClass=VilleRepository::class)
  */
-class Villes
+class Ville
 {
     /**
      * @ORM\Id()
