@@ -48,6 +48,28 @@ class AdminController extends AbstractController
         ]);
     }
     /**
+     * @Route("/{idParticipant}/edit", name="participant_edit_admin", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Participant $participant): Response
+    {
+        $form = $this->createForm(ParticipantType::class, $participant);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('participant_index');
+        }
+
+        return $this->render('participant/edit.html.twig', [
+            'participant' => $participant,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+    /**
      * @Route("/nav", name="nav_admin")
      */
     public function navAdmin()
@@ -69,7 +91,7 @@ class AdminController extends AbstractController
      */
     public function show(Participant $participant): Response
     {
-        return $this->render('participant/show.html.twig', [
+        return $this->render('Admin/showUser.html.twig', [
             'participant' => $participant,
         ]);
     }
