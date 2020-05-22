@@ -23,14 +23,10 @@
                 <th>Mail</th>
                 <td>{{ participant.mail }}</td>
             </tr>
-            <tr>
-                <th>MotPasse</th>
-                <td>{{ participant.password }}</td>
-            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('participant_index') }}">back to list</a>
+    <a href="{{ path('admin_listing') }}">back to list</a>
 
     <a href="{{ path('participant_edit', {'idParticipant': participant.idParticipant}) }}">edit</a>
 
