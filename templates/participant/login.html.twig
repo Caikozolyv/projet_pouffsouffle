@@ -1,5 +1,4 @@
 {%  extends 'layout.html.twig' %}
-
 {% block body %}
     <form method="post">
         <label for="username">Email : </label>
@@ -8,7 +7,10 @@
         <label for="password">Password : </label>
         <input type="password" name="_password" id="password">
 
-        <button type="submit">Login !</button>
+        <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+        <label for="remember_me">Se Souvenir de moi</label>
+
+        <button type="submit">Connexion !</button>
     </form>
 
 {% endblock %}
