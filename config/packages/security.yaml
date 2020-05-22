@@ -25,5 +25,4 @@ security:
        App\Entity\Participant:
             algorithm: bcrypt
     access_control:
-        - { path: '^/admin', roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
         - {path: '^/admin', roles: ROLE_ADMIN}
