@@ -23,16 +23,12 @@
                 <th>Mail</th>
                 <td>{{ participant.mail }}</td>
             </tr>
-            <tr>
-                <th>MotPasse</th>
-                <td>{{ participant.password }}</td>
-            </tr>
         </tbody>
     </table>
 
-{#    <a href="{{ path('participant_index') }}">back to list</a>#}
+    <a href="{{ path('admin_listing') }}">back to list</a>
 
-    <a href="{{ path('participant_edit', {'idParticipant': participant.idParticipant}) }}">edit</a>
+    <a href="{{ path('participant_edit_admin', {'idParticipant': participant.idParticipant}) }}">edit</a>
 
-    {{ include('participant/_delete_form.html.twig') }}
+    {{ include('Admin/_delete_form.html.twig') }}
 {% endblock %}

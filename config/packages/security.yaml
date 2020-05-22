@@ -9,6 +9,7 @@ security:
             pattern: ^/
             provider: our_db_provider
             anonymous: ~
+            user_checker: App\Security\ParticipantChecker
             form_login:
                 login_path: login
                 check_path: login
@@ -24,3 +25,5 @@ security:
     encoders:
        App\Entity\Participant:
             algorithm: bcrypt
+    access_control:
+        - {path: '^/admin', roles: ROLE_ADMIN}
