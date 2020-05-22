@@ -32,7 +32,7 @@ class AdminController extends AbstractController
             $hashed = $encoder->encodePassword($participant, $participant->getPassword());
             $participant->setPassword($hashed);
             $participant->setUsername($participant->getMail());
-            $participant->setAdministrateur(false);
+            $participant->setAdministrateur(true);
             $participant->setActif(true);
 
             $entityManager = $this->getDoctrine()->getManager();
