@@ -34,6 +34,15 @@ class ParticipantController extends AbstractController
     {
         return $this->render("participant/login.html.twig", []);
     }
+    /**
+     * Symfony gere la route entièrement
+     * @Route("/logout", name="logout")
+     */
+
+    public function logout()
+    {
+    }
+
 
     /**
      * @Route("/new", name="participant_new", methods={"GET","POST"})
