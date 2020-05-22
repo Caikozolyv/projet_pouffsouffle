@@ -1,14 +1,16 @@
 {%  extends 'layout.html.twig' %}
-
 {% block body %}
     <form method="post">
-        <label for="mail">Email : </label>
-        <input type="text" name="_mail" id="mail">
+        <label for="username">Email : </label>
+        <input type="string" name="_username" id="username">
 
-        <label for="motPasse">Password : </label>
-        <input type="password" name="_motPasse" id="motPasse">
+        <label for="password">Password : </label>
+        <input type="password" name="_password" id="password">
 
-        <button type="submit">Login !</button>
+        <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+        <label for="remember_me">Se Souvenir de moi</label>
+
+        <button type="submit">Connexion !</button>
     </form>
 
 {% endblock %}
