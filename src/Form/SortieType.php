@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Sortie;
 use App\Entity\Lieu;
 use App\Entity\Campus;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -37,12 +38,18 @@ class SortieType extends AbstractType
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'label' => "Campus"
+                'label' => "Campus",
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('c')->orderBy('c.nom', 'ASC');
+                }
             ])
 
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
-                'label' => "Lieu"
+                'choice_label' => "Lieu",
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
+    }
             ])
 
         ;
