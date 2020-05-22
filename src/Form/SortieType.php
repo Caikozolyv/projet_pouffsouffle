@@ -39,7 +39,7 @@ class SortieType extends AbstractType
                 'class' => Campus::class,
                 'label' => "Campus"
             ])
-            //->add('ville')
+
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'label' => "Lieu"
