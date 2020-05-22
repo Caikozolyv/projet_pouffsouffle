@@ -44,13 +44,6 @@ class SortieType extends AbstractType
                 'class' => Lieu::class,
                 'label' => "Lieu"
             ])
-            //->add('rue')
-            //->add('codePostal')
-            //->add('latitude', EntityType::class, [
-            //    'class' => Lieu::class,
-            //    'label' => "Latitude"
-            //])
-            // ->add('longitude')
 
         ;
     }
