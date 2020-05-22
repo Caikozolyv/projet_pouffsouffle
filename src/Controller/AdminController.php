@@ -46,4 +46,12 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    /**
+     * @Route("/nav", name="nav_admin")
+     */
+    public function navAdmin()
+    {
+        return $this->render('Admin\homeAdmin.html.twig', []);
+    }
+
 }
