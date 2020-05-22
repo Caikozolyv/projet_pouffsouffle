@@ -9,6 +9,7 @@ security:
             pattern: ^/
             provider: our_db_provider
             anonymous: ~
+            user_checker: App\Security\ParticipantChecker
             form_login:
                 login_path: login
                 check_path: login
