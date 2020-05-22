@@ -4,6 +4,9 @@ namespace App\Form;
 
 use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,9 +18,14 @@ class ParticipantType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('mail')
-            ->add('motPasse')
-            ->add('listeSortiesDuParticipant')
+            ->add('mail', EmailType::class)
+            ->add('password', RepeatedType::class,[
+                'type'=>PasswordType::class,
+                'invalid_message'=>'The PassWord fields must Match',
+                'required' => true,
+                'first_options' => array('label' => 'Password'),
+                'second_options' => array ('label' => 'Repeat Password'),
+            ])
             ->add('campus')
         ;
     }

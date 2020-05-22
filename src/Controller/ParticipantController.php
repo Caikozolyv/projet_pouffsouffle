@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/participant")
@@ -31,24 +32,30 @@ class ParticipantController extends AbstractController
      */
     public function login()
     {
-        return $this->render('participant/login.html.twig', []);
+        return $this->render("participant/login.html.twig", []);
     }
 
     /**
      * @Route("/new", name="participant_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $participant = new Participant();
         $form = $this->createForm(ParticipantType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $hashed = $encoder->encodePassword($participant, $participant->getPassword());
+            $participant->setPassword($hashed);
+            $participant->setUsername($participant->getMail());
+            $participant->setAdministrateur(true);
+            $participant->setActif(true);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($participant);
             $entityManager->flush();
 
-            return $this->redirectToRoute('participant_index');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('participant/new.html.twig', [
