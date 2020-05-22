@@ -17,6 +17,8 @@ class EtatController extends AbstractController
 {
     /**
      * @Route("/", name="etat_index", methods={"GET"})
+     * @param EtatRepository $etatRepository
+     * @return Response
      */
     public function index(EtatRepository $etatRepository): Response
     {
