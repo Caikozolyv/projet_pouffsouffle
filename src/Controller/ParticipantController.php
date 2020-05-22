@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/participant")
@@ -30,11 +30,15 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function login()
+    public function login(ParticipantRepository $pr)
     {
-//        if ($this->getUser()) {
-//            return $this->redirectToRoute('participant_show');
-//        }
+        if ($this->getUser()) {
+            $participant = $this->getUser()->getUsername();
+            $participantId = $pr->findBy([$participant]);
+            return $this->redirectToRoute('participant_show', [
+                'participantId' => $participantId
+            ]);
+        }
         return $this->render("participant/login.html.twig", []);
     }
     /**
@@ -47,15 +51,13 @@ class ParticipantController extends AbstractController
     }
 
     /**
-     * @Route("/{idParticipant}", name="participant_show", methods={"GET"})
+     * @Route("/profile", name="participant_show", methods={"GET"})
      */
-    public function show(Participant $participant): Response
+    public function show(ParticipantRepository $pr, UserInterface $user): Response
     {
-        $participantId = $participant->getIdParticipant();
-        dump($participantId);
+        $participant = $pr->findOneByUsername($user->getUsername());
         return $this->render('participant/show.html.twig', [
-            'participant' => $participant,
-            'participantId' => $participantId
+            'participant' => $participant
         ]);
     }
 
