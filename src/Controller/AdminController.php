@@ -7,6 +7,7 @@ use App\Entity\Participant;
 use App\Form\CampusType;
 use App\Form\ParticipantType;
 use App\Repository\CampusRepository;
+use App\Repository\ParticipantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,5 +54,25 @@ class AdminController extends AbstractController
     {
         return $this->render('Admin\homeAdmin.html.twig', []);
     }
+
+    /**
+     * @Route("/liste", name="admin_listing")
+     */
+    public function listeUtilisateurs(ParticipantRepository $participantRepository): Response
+    {
+        return $this->render('Admin/listeUtilisateurs.html.twig', [
+            'participants' => $participantRepository->findAll(),
+        ]);
+    }
+    /**
+     * @Route("/{idParticipant}", name="participant_show_admin", methods={"GET"})
+     */
+    public function show(Participant $participant): Response
+    {
+        return $this->render('participant/show.html.twig', [
+            'participant' => $participant,
+        ]);
+    }
+
 
 }
