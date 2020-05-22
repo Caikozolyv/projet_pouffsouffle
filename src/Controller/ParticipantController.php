@@ -32,6 +32,9 @@ class ParticipantController extends AbstractController
      */
     public function login()
     {
+//        if ($this->getUser()) {
+//            return $this->redirectToRoute('participant_show');
+//        }
         return $this->render("participant/login.html.twig", []);
     }
     /**
@@ -48,8 +51,11 @@ class ParticipantController extends AbstractController
      */
     public function show(Participant $participant): Response
     {
+        $participantId = $participant->getIdParticipant();
+        dump($participantId);
         return $this->render('participant/show.html.twig', [
             'participant' => $participant,
+            'participantId' => $participantId
         ]);
     }
 
