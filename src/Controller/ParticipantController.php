@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/participant")
@@ -30,8 +31,15 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function login()
+    public function login(ParticipantRepository $pr)
     {
+        if ($this->getUser()) {
+            $participant = $this->getUser()->getUsername();
+            $participantId = $pr->findBy([$participant]);
+            return $this->redirectToRoute('participant_show', [
+                'participantId' => $participantId
+            ]);
+        }
         return $this->render("participant/login.html.twig", []);
     }
     /**
@@ -44,27 +52,37 @@ class ParticipantController extends AbstractController
     }
 
     /**
-     * @Route("/{idParticipant}", name="participant_show", methods={"GET"})
+     * @Route("/profile", name="participant_show", methods={"GET"})
      */
-    public function show(Participant $participant): Response
+    public function show(ParticipantRepository $pr, UserInterface $user): Response
     {
+        $participant = $pr->findOneByUsername($user->getUsername());
         return $this->render('participant/show.html.twig', [
-            'participant' => $participant,
+            'participant' => $participant
         ]);
     }
 
     /**
-     * @Route("/{idParticipant}/edit", name="participant_edit", methods={"GET","POST"})
+     * @Route("/edit", name="participant_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Participant $participant): Response
+    public function edit(Request $request, ParticipantRepository $pr, UserInterface $user, UserPasswordEncoderInterface $encoder): Response
     {
+        $participant = $pr->findOneByUsername($user->getUsername());
         $form = $this->createForm(ParticipantType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $hashed = $encoder->encodePassword($participant, $participant->getPassword());
+            $participant->setPassword($hashed);
+            $participant->setUsername($participant->getMail());
+            $participant->setMail($participant->getMail());
+            $participant->setTelephone($participant->getTelephone());
 
-            return $this->redirectToRoute('participant_index');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($participant);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('participant_edit');
         }
 
         return $this->render('participant/edit.html.twig', [

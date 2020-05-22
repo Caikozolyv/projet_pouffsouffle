@@ -23,8 +23,8 @@ class ParticipantType extends AbstractType
                 'type'=>PasswordType::class,
                 'invalid_message'=>'The PassWord fields must Match',
                 'required' => true,
-                'first_options' => array('label' => 'Password'),
-                'second_options' => array ('label' => 'Repeat Password'),
+                'first_options' => array('label' => 'Mot de passe'),
+                'second_options' => array ('label' => 'Répéter le mot de passe'),
             ])
             ->add('campus')
         ;
