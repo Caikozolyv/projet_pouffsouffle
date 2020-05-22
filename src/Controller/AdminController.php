@@ -41,9 +41,17 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('participant/new.html.twig', [
+        return $this->render('Admin/new.html.twig', [
             'participant' => $participant,
             'form' => $form->createView(),
         ]);
     }
+    /**
+     * @Route("/nav", name="nav_admin")
+     */
+    public function navAdmin()
+    {
+        return $this->render('Admin\homeAdmin.html.twig', []);
+    }
+
 }
