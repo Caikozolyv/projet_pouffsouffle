@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Sortie;
 use App\Entity\Lieu;
 use App\Entity\Campus;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -20,41 +21,29 @@ class SortieType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => "Nom de la sortie : "
             ])
-
             ->add('dateHeureDebut')
-
             ->add('dateLimiteInscription')
-
             ->add('nbInscriptionMax', IntegerType::class, [
                 'label' => "Nombre de places : "
             ])
-
             ->add('duree', IntegerType::class, [
                 'label' => "Durée : "
             ])
-
             ->add('infosSortie', TextareaType::class, [
                 'label' =>"Description et infos : ",
                 'attr' => [
                     'class' => 'overview-txt'
                 ]
             ])
-
-            ->add('campus', TextType::class, [
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
                 'label' => "Campus"
             ])
 
-            ->add('ville')
-
-            ->add('lieu')
-
-            //->add('rue')
-
-            //->add('codePostal')
-
-            //->add('latitude')
-
-            //->add('longitude')
+            ->add('lieu', EntityType::class, [
+                'class' => Lieu::class,
+                'label' => "Lieu"
+            ])
 
         ;
     }
