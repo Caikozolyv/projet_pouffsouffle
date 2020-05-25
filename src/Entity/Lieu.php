@@ -161,4 +161,10 @@ class Lieu
     {
         $this->listeSorties = $listeSorties;
     }
+
+    public function __toString()
+    {
+        return (string)$this->getNomLieu();
+    }
+
 }
