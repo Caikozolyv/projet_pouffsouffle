@@ -1,12 +1,16 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Participant{% endblock %}
+{% block title %}Sortir.com - Mon profil{% endblock %}
 
 {% block body %}
     <h1>Mon Profil</h1>
 
     <table class="table">
         <tbody>
+        <tr>
+            <th>Image de profil</th>
+            <td>{{ participant.imageProfil }}</td>
+        </tr>
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>
@@ -24,15 +28,15 @@
                 <td>{{ participant.mail }}</td>
             </tr>
             <tr>
-                <th>MotPasse</th>
-                <td>{{ participant.password }}</td>
+                <th>Campus</th>
+                <td>{{ participant.campus }}</td>
             </tr>
         </tbody>
     </table>
 
 {#    <a href="{{ path('participant_index') }}">back to list</a>#}
 
-    <a href="{{ path('participant_edit', {'idParticipant': participant.idParticipant}) }}">edit</a>
+    <a href="{{ path('participant_edit', {'idParticipant': participant.idParticipant}) }}" class="btn btn-success">Modifier mon profil</a>
 
-    {{ include('participant/_delete_form.html.twig') }}
+{#    {{ include('participant/_delete_form.html.twig') }}#}
 {% endblock %}
