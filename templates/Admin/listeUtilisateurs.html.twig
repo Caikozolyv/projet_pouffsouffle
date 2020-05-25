@@ -13,7 +13,7 @@
             <th>Prenom</th>
             <th>Telephone</th>
             <th>Mail</th>
-            <th>Administrateur</th>
+            <th>Admin</th>
             <th>Actif</th>
             <th>actions</th>
         </tr>
@@ -26,11 +26,10 @@
                 <td>{{ participant.prenom }}</td>
                 <td>{{ participant.telephone }}</td>
                 <td>{{ participant.mail }}</td>
-                <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
-                <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
+                <td>{{ participant.administrateur ? 'Oui' : 'Non' }}</td>
+                <td>{{ participant.actif ? 'Oui' : 'Non' }}</td>
                 <td>
-                    <a href="{{ path('participant_show_admin', {'idParticipant': participant.idParticipant}) }}">show</a>
-                    <a href="{{ path('participant_edit', {'idParticipant': participant.idParticipant}) }}">edit</a>
+                    <a href="{{ path('participant_show_admin', {'idParticipant': participant.idParticipant}) }}">Voir</a>
                 </td>
             </tr>
         {% else %}
@@ -41,5 +40,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('participant_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('participant_new') }}">Nouvel Utilisateur / Inscrire</a>
 {% endblock %}
