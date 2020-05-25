@@ -47,27 +47,6 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    /**
-     * @Route("/{idParticipant}/edit", name="participant_edit_admin", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Participant $participant): Response
-    {
-        $form = $this->createForm(ParticipantType::class, $participant);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('participant_index');
-        }
-
-        return $this->render('participant/edit.html.twig', [
-            'participant' => $participant,
-            'form' => $form->createView(),
-        ]);
-    }
-
-
 
     /**
      * @Route("/nav", name="nav_admin")
@@ -94,6 +73,34 @@ class AdminController extends AbstractController
         return $this->render('Admin/showUser.html.twig', [
             'participant' => $participant,
         ]);
+    }
+
+    /**
+     * @Route("/{idParticipant}", name="participant_delete_admin", methods={"DELETE"})
+     */
+    public function delete(Request $request, Participant $participant): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$participant->getIdParticipant(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($participant);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('Admin\homeAdmin.html.twig');
+    }
+    /**
+     * @Route("desactiver/{idParticipant}", name="participant_desactiver_admin")
+     */
+    public function desactiver(Request $request, Participant $participant): Response
+    {
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+
+            $entityManager->flush();
+
+
+        return $this->redirectToRoute('Admin\homeAdmin.html.twig');
     }
 
 
