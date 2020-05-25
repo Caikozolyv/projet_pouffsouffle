@@ -6,27 +6,25 @@
     <h1>Sortie index</h1>
 
     <div>
-        <a href="{{ path('search_sortie') }}"class="btn">Rechercher</a>
+        <a href="{{ path('search_sortie') }}" class="btn">Rechercher</a>
     </div>
 
     <table class="table">
         <thead>
         <tr>
-            <th>IdSortie</th>
-            <th>Name</th>
-            <th>DateHeureDebut</th>
-            <th>Duree</th>
-            <th>DateLimiteInscription</th>
-            <th>NbInscriptionMax</th>
-            <th>InfosSortie</th>
+            <th>Nom</th>
+            <th>Date et heure de début</th>
+            <th>Durée</th>
+            <th>Date Limite d'inscription</th>
+            <th>Nombre d'inscriptions maximum</th>
+            <th>Infos Sortie</th>
             <th>Etat</th>
-            <th>actions</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for sortie in sorties %}
             <tr>
-                <td>{{ sortie.idSortie }}</td>
                 <td>{{ sortie.name }}</td>
                 <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d') : '' }}</td>
                 <td>{{ sortie.duree ? sortie.duree|date('H:i:s') : '' }}</td>
