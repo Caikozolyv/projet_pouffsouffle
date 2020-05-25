@@ -46,7 +46,7 @@ class SortieType extends AbstractType
 
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
-                'choice_label' => "Lieu",
+                'label' => "Lieu",
                 'query_builder' => function(EntityRepository $repository) {
                     return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
     }
