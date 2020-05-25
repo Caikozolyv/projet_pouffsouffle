@@ -19,6 +19,8 @@ class SortieController extends AbstractController
 {
     /**
      * @Route("/", name="sortie_index", methods={"GET"})
+     * @param SortieRepository $sortieRepository
+     * @return Response
      */
     public function index(SortieRepository $sortieRepository): Response
     {
@@ -60,6 +62,8 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/{idSortie}", name="sortie_show", methods={"GET"})
+     * @param Sortie $sortie
+     * @return Response
      */
     public function show(Sortie $sortie): Response
     {
@@ -70,6 +74,9 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/{idSortie}/edit", name="sortie_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Sortie $sortie
+     * @return Response
      */
     public function edit(Request $request, Sortie $sortie): Response
     {
@@ -90,6 +97,9 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/{idSortie}", name="sortie_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Sortie $sortie
+     * @return Response
      */
     public function delete(Request $request, Sortie $sortie): Response
     {

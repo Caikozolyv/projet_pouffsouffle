@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,17 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    public function findAllVisible() : array
+    {
+        return  $this->findAll();
+    }
+
+    public function findAllSortieQuery(): Query
+    {
+        return $this-> findAll()
+            ->getQuery();
+
+    }
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */
@@ -47,4 +59,6 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
 }
