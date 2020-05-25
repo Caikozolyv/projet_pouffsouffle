@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="participant")
@@ -39,11 +40,15 @@ class Participant implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Assert\Regex("/^[0-9]*$/")
      */
     private $telephone;
 
     /**
      * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
+     * @Assert\Email(
+     *     message = "L'email '{{ value }}' n'est pas un email valide."
+     * )
      */
     private $mail;
 
