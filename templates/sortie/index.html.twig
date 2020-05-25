@@ -5,14 +5,9 @@
 {% block body %}
     <h1>Sortie index</h1>
 
-            <div class="jumbotron">
-                <div class="container">
-                    {{ form_start(form) }}
-                    {{ form_widget(form) }}
-
-                    {{ form_end(form) }}
-                </div>
-            </div>
+    <div>
+        <a href="{{ path('search_sortie') }}"class="btn">Rechercher</a>
+    </div>
 
     <table class="table">
         <thead>

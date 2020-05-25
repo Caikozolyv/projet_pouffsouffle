@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Recherche des sorties{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <div class="container">
+            {{ form_start(search_form) }}
+            <div class="form-row">
+                <div class="col">
+                    {{ form_row(search_form.listeCampus) }}
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    {{ form_row(search_form.searchBar) }}
+                    <div class="row">
+                        <div class="col">
+                            {{ form_row(search_form.dateMin) }}
+                        </div>
+                        <div class="col">
+                            {{ form_row(search_form.dateMax) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col" style="background-color: #5eb5e0">
+                    {{ form_row(search_form.checkBox) }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    {{ form_row(search_form.Rechercher) }}
+                </div>
+
+            </div>
+            {{ form_end(search_form) }}
+        </div>
+    </div>
+
+    </div>
+
+{% endblock %}
