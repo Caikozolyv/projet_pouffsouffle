@@ -86,23 +86,29 @@ class AdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('Admin\homeAdmin.html.twig');
+        return $this->redirectToRoute('nav_admin');
     }
     /**
      * @Route("desactiver/{idParticipant}", name="participant_desactiver_admin")
      */
-    public function desactiver(Request $request): Response
+    public function desactiver(Request $request, $idParticipant): Response
     {
-        $id = idParticipant;
-        $partRepo = $this->getDoctrine()->getRepository(Participant::class);
-        $participant = $partRepo->find($id);
+
+        $participant = $this->getDoctrine()->getRepository(Participant::class)->find($idParticipant);
+
 
         $entityManager = $this->getDoctrine()->getManager();
-        $participant->setActif(false);
+        if($participant->getActif()) {
+            $participant->setActif(false);
+        }
+        else{
+            $participant->setActif(true);
+        }
+        $entityManager->persist($participant);
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('Admin\homeAdmin.html.twig');
+        return $this->redirectToRoute('nav_admin');
     }
 
 
