@@ -5,19 +5,23 @@
 {% block body %}
     <h1>Sortie index</h1>
 
+    <div>
+        <a href="{{ path('search_sortie') }}"class="btn">Rechercher</a>
+    </div>
+
     <table class="table">
         <thead>
-            <tr>
-                <th>IdSortie</th>
-                <th>Name</th>
-                <th>DateHeureDebut</th>
-                <th>Duree</th>
-                <th>DateLimiteInscription</th>
-                <th>NbInscriptionMax</th>
-                <th>InfosSortie</th>
-                <th>Etat</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>IdSortie</th>
+            <th>Name</th>
+            <th>DateHeureDebut</th>
+            <th>Duree</th>
+            <th>DateLimiteInscription</th>
+            <th>NbInscriptionMax</th>
+            <th>InfosSortie</th>
+            <th>Etat</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for sortie in sorties %}
