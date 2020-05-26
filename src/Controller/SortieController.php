@@ -101,11 +101,18 @@ class SortieController extends AbstractController
      * @param Request $request
      * @param Sortie $sortie
      */
-    public function inscire(Request $request, Sortie $sortie, EntityManager $em): Response
+    public function inscire(Request $request, Sortie $sortie): Response
     {
-        $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $sortie->addParticipant($user);
+        $entityManager->flush();
 
+        return $this->render('sortie/inscrisSucces.html.twig', [
+            'sortie' => $sortie,]);
     }
+
+
 
 
     /**

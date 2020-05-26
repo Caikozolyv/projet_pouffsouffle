@@ -3,7 +3,7 @@
 {% block title %}Sortie{% endblock %}
 
 {% block body %}
-    <h1>Sortie</h1>
+    <h1>Vous êtes Inscrit à cette sortie</h1>
 
     <table class="table">
         <tbody>
@@ -20,14 +20,6 @@
                 <td>{{ sortie.duree ? sortie.duree|date('H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>DateLimiteInscription</th>
-                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>NbInscriptionMax</th>
-                <td>{{ sortie.nbInscriptionMax }}</td>
-            </tr>
-            <tr>
                 <th>InfosSortie</th>
                 <td>{{ sortie.infosSortie }}</td>
             </tr>
@@ -35,18 +27,10 @@
                 <th>Lieu</th>
                 <td>{{ sortie.lieu }}</td>
             </tr>
-            <tr>
-                <th>Etat</th>
-                <td>{{ sortie.etat }}</td>
-            </tr>
         </tbody>
     </table>
-    <a class="btn btn-success" href="{{ path('sortie_inscrire', {'idSortie': sortie.idSortie}) }}">S'inscrire</a>
     <br>
     <a class="btn btn-light" href="{{ path('sortie_index') }}">Retour à la Liste</a>
-
-
-
 
     {#{{ include('sortie/_delete_form.html.twig') }}#}
 {% endblock %}
