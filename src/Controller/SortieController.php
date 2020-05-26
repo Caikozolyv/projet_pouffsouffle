@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SortieType;
+use App\Form\VilleType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,27 +39,46 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $lieu = new Lieu();
+        #$ville = new Ville();
+
+        #$formVille = $this->createForm(VilleType::class, $ville);
+        #$formVille->handleRequest($request);
+
         $formLieu = $this->createForm(LieuType::class, $lieu);
         $formLieu->handleRequest($request);
+
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
-
-
-
         if ($form->isSubmitted() && $form->isValid()) {
+
+            #$sortie->setName();
+            #$sortie->setDateHeureDebut();
+            #$sortie->setDateLimiteInscription();
+            #$sortie->setNbInscriptionMax();
+            #$sortie->setDuree();
+            #$sortie->setInfosSortie();
+
+            #$sortie->setCampus();
+            #$sortie->setLieu();
+            #$lieu->setLatitude();
+            #$lieu->setLongitude();
+
+
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('sortie_index');
+            return $this->redirectToRoute('sortie');
         }
 
         return $this->render('sortie/new.html.twig', [
             'sortie' => $sortie,
             'form' => $form->createView(),
-            'formLieu' =>$formLieu->createView()
+            'formLieu' =>$formLieu->createView(),
+            #'formVille' =>$formVille
         ]);
     }
 
