@@ -7,7 +7,10 @@
                 <ul class="navbar-nav mr-auto">
                         {%  if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <li class="nav-item">
-                                <a class="nav-link" href="{{ path('participant_edit') }}">Mon Profil</a>
+                                <a class="nav-link" href="{{ path('participant_show') }}">Mon Profil</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ path('sortie_index') }}">Sorties</a>
                         </li>
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ path('logout') }}">
@@ -21,7 +24,7 @@
                         </li>
                         {% else %}
                         <li class="nav-item">
-                                <a class="nav-link" href="{{ path('login') }}">Login</a>
+                                <a class="nav-link" href="{{ path('login') }}">Se connecter</a>
                         </li>
 
                         {%  endif %}

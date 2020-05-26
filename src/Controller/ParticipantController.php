@@ -41,6 +41,7 @@ class ParticipantController extends AbstractController
             ]);
         }
         return $this->render("participant/login.html.twig", []);
+
     }
     /**
      * Symfony gere la route entièrement
@@ -77,6 +78,7 @@ class ParticipantController extends AbstractController
             $participant->setUsername($participant->getMail());
             $participant->setMail($participant->getMail());
             $participant->setTelephone($participant->getTelephone());
+            $participant->setImageProfil($participant->getImageProfil());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($participant);

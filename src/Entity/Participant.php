@@ -68,6 +68,11 @@ class Participant implements UserInterface
     private $actif;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $imageProfil;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="organisateur")
      */
     private $listeSortiesOrga;
@@ -242,6 +247,22 @@ class Participant implements UserInterface
         $this->actif = $actif;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImageProfil()
+    {
+        return $this->imageProfil;
+    }
+
+    /**
+     * @param mixed $imageProfil
+     */
+    public function setImageProfil($imageProfil): void
+    {
+        $this->imageProfil = $imageProfil;
     }
 
     public function getRoles()

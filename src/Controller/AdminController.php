@@ -32,7 +32,7 @@ class AdminController extends AbstractController
             $hashed = $encoder->encodePassword($participant, $participant->getPassword());
             $participant->setPassword($hashed);
             $participant->setUsername($participant->getMail());
-            $participant->setAdministrateur(true);
+            $participant->setAdministrateur(false);
             $participant->setActif(true);
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -86,21 +86,29 @@ class AdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('Admin\homeAdmin.html.twig');
+        return $this->redirectToRoute('nav_admin');
     }
     /**
      * @Route("desactiver/{idParticipant}", name="participant_desactiver_admin")
      */
-    public function desactiver(Request $request, Participant $participant): Response
+    public function desactiver(Request $request, $idParticipant): Response
     {
 
-            $entityManager = $this->getDoctrine()->getManager();
+        $participant = $this->getDoctrine()->getRepository(Participant::class)->find($idParticipant);
 
 
-            $entityManager->flush();
+        $entityManager = $this->getDoctrine()->getManager();
+        if($participant->getActif()) {
+            $participant->setActif(false);
+        }
+        else{
+            $participant->setActif(true);
+        }
+        $entityManager->persist($participant);
+        $entityManager->flush();
 
 
-        return $this->redirectToRoute('Admin\homeAdmin.html.twig');
+        return $this->redirectToRoute('nav_admin');
     }
 
 
