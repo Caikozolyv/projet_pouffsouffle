@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Sortie;
 use App\Entity\Lieu;
 use App\Entity\Campus;
+use App\Entity\Ville;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -43,6 +44,19 @@ class SortieType extends AbstractType
                     return $repository->createQueryBuilder('c')->orderBy('c.nom', 'ASC');
                 }
             ])
+
+            #La classe Ville ne veut pas s'injecter dans le formulaire
+            #Help, Au secours, A votre bon coeur pour aider!!!
+
+            #->add('ville', EntityType::class, [
+                #'class' =>Ville::class,
+                #'label' => "ville",
+                #'query_builder' => function(EntityRepository $repository) {
+                    #return $repository->createQueryBuilder('c')->orderBy('c.nomVille', 'ASC');
+                #}
+            #])
+
+
 
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
