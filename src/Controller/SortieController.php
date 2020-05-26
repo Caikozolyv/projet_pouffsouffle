@@ -65,8 +65,6 @@ class SortieController extends AbstractController
             #$lieu->setLongitude();
 
 
-
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
@@ -78,7 +76,7 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'form' => $form->createView(),
             'formLieu' =>$formLieu->createView(),
-            #'formVille' =>$formVille
+            #'formVille' =>$formVille->createView()
         ]);
     }
 
