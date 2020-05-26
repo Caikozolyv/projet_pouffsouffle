@@ -41,6 +41,7 @@ class ParticipantController extends AbstractController
             ]);
         }
         return $this->render("participant/login.html.twig", []);
+
     }
     /**
      * Symfony gere la route entièrement
