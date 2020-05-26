@@ -99,7 +99,6 @@ class Sortie
     {
         if (!$this->listeParticipants->contains($participant)) {
            $this->listeParticipants[] =$participant;
-
         }
         return $this;
     }
