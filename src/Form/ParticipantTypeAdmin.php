@@ -18,7 +18,7 @@ class ParticipantTypeAdmin extends AbstractType
         $builder
             ->add('imageProfil', FileType::class,[
                 'label'=>'Image de profil',
-                'required'=>false
+                'required'=>true
             ])
             ->add('nom')
             ->add('prenom')

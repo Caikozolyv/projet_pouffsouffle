@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Repository\SortieRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,7 +68,7 @@ class SortieController extends AbstractController
      */
     public function show(Sortie $sortie): Response
     {
-        return $this->render('sortie/new.html.twig', [
+        return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
         ]);
     }
@@ -94,6 +95,18 @@ class SortieController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/inscire/{idSortie}", name="sortie_inscrire", methods={"GET","POST"})
+     * @param Request $request
+     * @param Sortie $sortie
+     */
+    public function inscire(Request $request, Sortie $sortie, EntityManager $em): Response
+    {
+        $this->getDoctrine()->getManager();
+
+    }
+
 
     /**
      * @Route("/{idSortie}", name="sortie_delete", methods={"DELETE"})
