@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\Participant;
 use App\Form\CampusType;
 use App\Form\ParticipantType;
+use App\Form\ParticipantTypeAdmin;
 use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +26,7 @@ class AdminController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $participant = new Participant();
-        $form = $this->createForm(ParticipantType::class, $participant);
+        $form = $this->createForm(ParticipantTypeAdmin::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
