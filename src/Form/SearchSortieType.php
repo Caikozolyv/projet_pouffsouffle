@@ -3,14 +3,12 @@
 namespace App\Form;
 
 use App\Entity\SearchSortie;
+
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,15 +20,14 @@ class SearchSortieType extends AbstractType
 
         $builder
             ->add('listeCampus', ChoiceType::class, [
-                'label' => 'Campus',
-                'choices' => [
-                    'Campus de Nantes'=> 'Nantes',
-                    'Campus de Niort'=> 'Niort',
-                    'Campus de Rennes'=> 'Rennes',
-                    'Campus de Quimper'=> 'Quimper',
+                'required'=>false,
+                'choices' => [0,1,2,3
                 ]
+
+
             ])
             ->add('checkBox', ChoiceType::class, [
+                'required'=>false,
                 'label'=> false,
                 'choices' => [
                     'Sorties dont je suis organisateur/trice' => 'Orga',
@@ -44,6 +41,7 @@ class SearchSortieType extends AbstractType
             ])
 
             -> add('searchBar', TextareaType::class, [
+                'required'=>false,
                 'label' => 'Le nom de la sortie contient',
                 'attr' => [
                     'placeholder' => 'Search',
@@ -51,11 +49,13 @@ class SearchSortieType extends AbstractType
             ])
 
             ->add('dateMin', DateType::class, [
+                'required'=>false,
                 'label'=> 'Entre',
                 'widget' => 'choice',
             ])
 
             ->add('dateMax', DateType::class, [
+                'required'=>false,
                 'label'=> 'et',
                 'widget' => 'choice',
             ])

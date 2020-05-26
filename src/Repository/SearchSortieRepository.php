@@ -17,4 +17,14 @@ class SearchSortieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ville::class);
     }
+
+    public function findByCampus(){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT s.campus
+             FROM App\Entity\Sortie s");
+        return $query->getResult();
+
+    }
+
 }

@@ -31,6 +31,15 @@ class SortieRepository extends ServiceEntityRepository
             ->getQuery();
 
     }
+
+    public function findAllCampus(){
+        $qb = $this->createQueryBuilder('s');
+        $qb-> andWhere('s.id_campus>1');
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */
