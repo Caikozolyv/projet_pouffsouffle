@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -162,17 +163,17 @@ class Sortie
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getListeParticipants(): ArrayCollection
+    public function getListeParticipants(): Collection
     {
         return $this->listeParticipants;
     }
 
     /**
-     * @param ArrayCollection $listeParticipants
+     * @param Collection $listeParticipants
      */
-    public function setListeParticipants(ArrayCollection $listeParticipants): void
+    public function setListeParticipants(Collection $listeParticipants): void
     {
         $this->listeParticipants = $listeParticipants;
     }
