@@ -92,6 +92,15 @@ class Sortie
     public function __construct()
     {
         $this->listeParticipants = new ArrayCollection();
+
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->listeParticipants->contains($participant)) {
+           $this->listeParticipants[] =$participant;
+        }
+        return $this;
     }
 
     /**
@@ -157,6 +166,8 @@ class Sortie
     {
         $this->listeParticipants = $listeParticipants;
     }
+
+
 
     /**
      * @return mixed

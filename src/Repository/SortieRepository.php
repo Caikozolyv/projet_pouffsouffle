@@ -32,14 +32,14 @@ class SortieRepository extends ServiceEntityRepository
 
     }
 
-    public function findAllCampus(){
-        $qb = $this->createQueryBuilder('c');
-        $qb-> andWhere('c.nom');
-        $query = $qb->getQuery();
-        return $query->getResult();
+    public function findAllByUser($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere(':user MEMBER OF s.listeParticipants')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
-
-
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */

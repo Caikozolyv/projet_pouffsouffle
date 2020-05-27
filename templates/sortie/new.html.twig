@@ -23,10 +23,11 @@
 
                 <div class="text-type">
                     <label for="ville">Ville</label>
-                    <select class="text-type" id="ville">
-                    </select>
+                    <input type="text" class="text-type" id="ville">
                 </div>
 
+                {#Je n'arrive pas à afficher la liste des villes#}
+                {#{{ form_row(form.ville) }}#}
 
                 {{ form_row(form.lieu) }}
 
@@ -52,10 +53,15 @@
             </div>
         </div>
     </div>
+
     <div class="text-center">
+
         <button type="submit">Enregistrer</button>
+
         <button type="submit">Publier la sortie</button>
+
         <button type="submit">Annuler</button>
+
     </div>
     {# <a href="{{ path('sortie_index') }}">back to list</a> #}
 
