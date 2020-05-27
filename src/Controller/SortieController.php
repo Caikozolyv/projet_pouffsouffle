@@ -2,17 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Lieu;
-use App\Entity\SearchSortie;
 use App\Entity\Sortie;
-use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
 use App\Form\SortieType;
-use App\Form\VilleType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,22 +35,16 @@ class SortieController extends AbstractController
         if ($form->isSubmitted()) {
 
 
-
-
-
-            $newsearch = new Sortie();
-            $nform= $this->createForm(SearchSortieType::class, $newsearch);
-            $nform->handleRequest($request);
-
             return $this->redirectToRoute('sortie_index',[
-                'form'=> $nform->createView(),
             //'sorties' => $sortieRepository->notre requete sql(),
             ]);
         }
 
+        $laListe = $sortieRepository->findAll();
+
         return $this->render('sortie/index.html.twig', [
             'form'=> $form->createView(),
-            'sorties' => $sortieRepository->findAll(),
+            'sorties' => $laListe,
         ]);
     }
 
@@ -64,46 +55,51 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $lieu = new Lieu();
-        #$ville = new Ville();
+        $campus = new Campus();
+        $ville = new Ville();
 
-        #$formVille = $this->createForm(VilleType::class, $ville);
-        #$formVille->handleRequest($request);
-
-        $formLieu = $this->createForm(LieuType::class, $lieu);
-        $formLieu->handleRequest($request);
 
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            #$sortie->setName();
-            #$sortie->setDateHeureDebut();
-            #$sortie->setDateLimiteInscription();
-            #$sortie->setNbInscriptionMax();
-            #$sortie->setDuree();
-            #$sortie->setInfosSortie();
+            $sortie->setName($sortie->getName());
+            $sortie->setDateHeureDebut($sortie->getDateHeureDebut());
+            $sortie->setDateLimiteInscription($sortie->getDateLimiteInscription());
+            $sortie->setNbInscriptionMax($sortie->getNbInscriptionMax());
+            $sortie->setDuree($sortie->getDuree());
+            $sortie->setInfosSortie($sortie->getInfosSortie());
 
-            #$sortie->setCampus();
-            #$sortie->setLieu();
-            #$lieu->setLatitude();
-            #$lieu->setLongitude();
+            $campus->setNom($campus->getName());
 
+            $lieu->setNomLieu($lieu->getNomLieu());
+            $lieu->setRue($lieu->getNomLieu());
+            $lieu->setLatitude($lieu->getLatitude());
+            $lieu->setLongitude($lieu->getLongitude());
 
-
+            //Ville ne marche toujours pas, tralalalalala
+            $ville->setNomVille($ville->getNomVille());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
 
             return $this->redirectToRoute('sortie');
+
+            //La création ne marche pas :(
+
+
+
         }
 
         return $this->render('sortie/new.html.twig', [
+
+            //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
+            //'sortie' => $sortieRepository->findSortie(),
+
             'sortie' => $sortie,
             'form' => $form->createView(),
-            'formLieu' =>$formLieu->createView(),
-            #'formVille' =>$formVille
         ]);
     }
 
@@ -112,10 +108,23 @@ class SortieController extends AbstractController
      * @param Sortie $sortie
      * @return Response
      */
-    public function show(Sortie $sortie): Response
+    public function show(Sortie $sortie, ParticipantRepository $pr, SortieRepository $sr, $idSortie): Response
     {
+        $inscrit = false;
+        $currentUser = $this->getUser()->getUsername();
+        $user = $pr->findOneByUsername($currentUser);
+        $userId = $user->getIdParticipant();
+        $userSorties = $sr->findAllByUser($userId);
+        dump($userSorties);
+        foreach ($userSorties as $sortie) {
+            if($sortie->getIdSortie() == $idSortie) {
+                $inscrit = true;
+                break;
+            }
+        }
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
+            'inscrit' => $inscrit
         ]);
     }
 
@@ -158,7 +167,22 @@ class SortieController extends AbstractController
             $entityManager->flush();
             //}
         return $this->render('sortie/inscrisSucces.html.twig', [
-            'sortie' => $sortie,]);
+            'sortie' => $sortie,
+            'inscrit'=>true]);
+    }
+
+    /**
+     * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
+     */
+    public function desinscrire(Sortie $sortie) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $sortie->removeParticipant($user);
+        $entityManager->flush();
+
+        return $this->render('sortie/inscrisSucces.html.twig', [
+            'sortie' => $sortie,
+            'inscrit'=>false]);
     }
 
     /**
@@ -191,19 +215,5 @@ class SortieController extends AbstractController
         }
 
         return $this->redirectToRoute('sortie_index');
-    }
-
-    /**
-     * @Route ("/sortie/search", name="sortie_search")
-     */
-
-    public function listSearch()
-    {
-        $searchRepo = $this->getDoctrine()->getRepository(Sortie::class);
-        $searches = $searchRepo->findAllSearch();
-
-        return $this->render('sortie/index.html.twig', [
-            "searches"=>$searches,
-        ]);
     }
 }

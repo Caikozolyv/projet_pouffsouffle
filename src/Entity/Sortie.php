@@ -99,6 +99,16 @@ class Sortie
     {
         if (!$this->listeParticipants->contains($participant)) {
            $this->listeParticipants[] =$participant;
+           $participant->addSortie($this);
+        }
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->listeParticipants->contains($participant)) {
+            $this->listeParticipants->removeElement($participant);
+            $participant->removeSortie($this);
         }
         return $this;
     }

@@ -47,4 +47,23 @@ class LieuRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findLieu (Lieu $lieu)
+
+    {
+        return $this->createQueryBuilder('s')
+
+            ->andWhere('s.lieu = :lieu')
+
+            ->setParameter('lieu', $lieu->getIdLieu())
+            ->setParameter('lieu', $lieu->getNomLieu())
+            ->setParameter('lieu', $lieu->getRue())
+            ->setParameter('lieu', $lieu->getLatitude())
+            ->setParameter('lieu', $lieu->getLongitude())
+            ->setParameter('lieu', $lieu->getListeSorties()) //Liste
+
+            ->getQuery()
+            ->getResult();
+
+    }
 }
