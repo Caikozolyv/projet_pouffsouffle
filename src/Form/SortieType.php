@@ -45,7 +45,7 @@ class SortieType extends AbstractType
                 }
             ])
 
-            #La classe Ville ne veut pas s'injecter dans le formulaire
+            #La classe Ville ne veut TOUJOURS pas s'injecter dans le formulaire
             #Help, Au secours, A votre bon coeur pour aider!!!
 
             #->add('ville', EntityType::class, [
