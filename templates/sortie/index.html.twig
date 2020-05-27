@@ -6,7 +6,10 @@
     <h1>Liste des sorties</h1>
 
     <div>
-        <a href="{{ path('search_sortie') }}" class="btn">Rechercher</a>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success" type="submit">Rechercher</button>
+        {{ form_end(form) }}
     </div>
 
     <table class="table">
