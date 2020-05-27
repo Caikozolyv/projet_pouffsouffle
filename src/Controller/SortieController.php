@@ -6,6 +6,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\LieuType;
+use App\Form\SearchSortieType;
 use App\Form\SortieType;
 use App\Form\VilleType;
 use App\Repository\SortieRepository;
@@ -23,11 +24,33 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="sortie_index", methods={"GET"})
      * @param SortieRepository $sortieRepository
+     * @param Request $request
      * @return Response
      */
-    public function index(SortieRepository $sortieRepository): Response
+    public function index(SortieRepository $sortieRepository, Request $request): Response
     {
+        $searchSortie = new Sortie();
+        $form= $this->createForm(SearchSortieType::class, $searchSortie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+
+
+
+
+
+            $newsearch = new Sortie();
+            $nform= $this->createForm(SearchSortieType::class, $newsearch);
+            $nform->handleRequest($request);
+
+            return $this->redirectToRoute('sortie_index',[
+                'form'=> $nform->createView(),
+            //'sorties' => $sortieRepository->notre requete sql(),
+            ]);
+        }
+
         return $this->render('sortie/index.html.twig', [
+            'form'=> $form->createView(),
             'sorties' => $sortieRepository->findAll(),
         ]);
     }
