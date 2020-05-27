@@ -21,7 +21,7 @@ class SearchSortieType extends AbstractType
         $builder
             ->add('listeCampus', ChoiceType::class, [
                 'required'=>false,
-                'choices' => [0,1,2,3
+                'choices' => [$this
                 ]
 
 

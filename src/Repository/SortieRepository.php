@@ -33,8 +33,8 @@ class SortieRepository extends ServiceEntityRepository
     }
 
     public function findAllCampus(){
-        $qb = $this->createQueryBuilder('s');
-        $qb-> andWhere('s.id_campus>1');
+        $qb = $this->createQueryBuilder('c');
+        $qb-> andWhere('c.nom');
         $query = $qb->getQuery();
         return $query->getResult();
     }

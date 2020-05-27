@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SearchSortie;
+use App\Entity\Sortie;
 use App\Form\SearchSortieType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,5 +35,15 @@ class SearchSortieController extends AbstractController
             'search_form'=> $searchSortieForm->createView()
         ]);
 
+    }
+
+    public function listCampus()
+    {
+        $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
+        $sorties = $sortieRepo->findAllCampus();
+
+        return $this->render('sortie/search.html.twig', [
+            "sorties"=>$sorties,
+        ]);
     }
 }
