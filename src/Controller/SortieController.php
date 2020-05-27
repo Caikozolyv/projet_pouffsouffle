@@ -4,13 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Lieu;
 use App\Entity\Sortie;
-use App\Entity\Ville;
 use App\Form\LieuType;
+use App\Form\SearchSortieType;
 use App\Form\SortieType;
-use App\Form\VilleType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,10 +102,23 @@ class SortieController extends AbstractController
      * @param Sortie $sortie
      * @return Response
      */
-    public function show(Sortie $sortie): Response
+    public function show(Sortie $sortie, ParticipantRepository $pr, SortieRepository $sr, $idSortie): Response
     {
+        $inscrit = false;
+        $currentUser = $this->getUser()->getUsername();
+        $user = $pr->findOneByUsername($currentUser);
+        $userId = $user->getIdParticipant();
+        $userSorties = $sr->findAllByUser($userId);
+        dump($userSorties);
+        foreach ($userSorties as $sortie) {
+            if($sortie->getIdSortie() == $idSortie) {
+                $inscrit = true;
+                break;
+            }
+        }
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
+            'inscrit' => $inscrit
         ]);
     }
 

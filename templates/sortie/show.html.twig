@@ -3,7 +3,7 @@
 {% block title %}Sortie{% endblock %}
 
 {% block body %}
-    <h1>Sortie</h1>
+    <h1>Sortie "{{ sortie.name }}"</h1>
 
     <table class="table">
         <tbody>
@@ -12,23 +12,23 @@
                 <td>{{ sortie.name }}</td>
             </tr>
             <tr>
-                <th>DateHeureDebut</th>
-                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d') : '' }}</td>
+                <th>Date et heure de début</th>
+                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Duree</th>
+                <th>Durée</th>
                 <td>{{ sortie.duree ? sortie.duree|date('H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>DateLimiteInscription</th>
-                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
+                <th>Date Limite d'inscription</th>
+                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('d-m-Y') : '' }}</td>
             </tr>
             <tr>
-                <th>NbInscriptionMax</th>
+                <th>Nombre d'inscriptions maximum</th>
                 <td>{{ sortie.nbInscriptionMax }}</td>
             </tr>
             <tr>
-                <th>InfosSortie</th>
+                <th>Infos Sortie</th>
                 <td>{{ sortie.infosSortie }}</td>
             </tr>
             <tr>
@@ -41,7 +41,26 @@
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-success" href="{{ path('sortie_inscrire', {'idSortie': sortie.idSortie}) }}">S'inscrire</a>
+    {% if inscrit == true %}
+        <a class="btn btn-success" data-toggle="modal" data-target="#baseModal" href="#">Se désinscrire</a>
+        <div class="modal" id="baseModal" style="width: 600px;position: absolute;top: 32%; left: 31%;">
+            <form action="{{ path('sortie_desinscrire', {'idSortie': sortie.idSortie}) }}" tabindex="-1">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Êtes-vous sûr(e) de vouloir vous désinscrire ?!</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body form-inline" style="width: 30%;margin: 0 auto;">
+                        <input type="submit" value="Se désinscrire">
+                    </div>
+                </div>
+            </form>
+        </div>
+    {% elseif inscrit == false %}
+        <a class="btn btn-success" href="{{ path('sortie_inscrire', {'idSortie': sortie.idSortie}) }}">S'inscrire</a>
+    {% endif %}
     <br>
     <a class="btn btn-light" href="{{ path('sortie_index') }}">Retour à la Liste</a>
 
