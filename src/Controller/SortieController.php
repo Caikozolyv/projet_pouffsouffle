@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Entity\FindSortie;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuType;
@@ -10,6 +11,7 @@ use App\Form\SearchSortieType;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,12 +30,17 @@ class SortieController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
-        $searchSortie = new Sortie();
+        $searchSortie = new FindSortie();
         $form= $this->createForm(SearchSortieType::class, $searchSortie);
         $form->handleRequest($request);
 
+
+
         if ($form->isSubmitted()) {
 
+            dump($request->get('name'));
+            dump($form->getData());
+            die();
 
             return $this->redirectToRoute('sortie_index',[
             //'sorties' => $sortieRepository->notre requete sql(),
@@ -104,20 +111,66 @@ class SortieController extends AbstractController
     }
 
     /**
+     * @Route("/inscire/{idSortie}", name="sortie_inscrire", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function inscire(Request $request, EntityManagerInterface $em, $idSortie, SortieRepository $sr): Response
+    {
+        $user = $this->getUser();
+        $sortie = $sr->find($idSortie);
+        //  if($sortie->getNbInscriptionMax() < sizeof($sortie->getListeParticipants())){
+        $sortie->addParticipant($user);
+        $em->flush();
+        //}
+        return $this->render('sortie/inscrisSucces.html.twig', [
+            'sortie' => $sortie,
+            'inscrit'=>true]);
+    }
+
+    /**
+     * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
+     */
+    public function desinscrire(Sortie $sortie, EntityManagerInterface $em, $idSortie, SortieRepository $sr) {
+        $user = $this->getUser();
+        $sortie = $sr->find($idSortie);
+        $sortie->removeParticipant($user);
+        $em->flush();
+
+        return $this->render('sortie/inscrisSucces.html.twig', [
+            'sortie' => $sortie,
+            'inscrit'=>false]);
+    }
+
+    /**
+     * @Route("/mySorties", name="sortie_show_my_sorties", methods={"GET","POST"})
+     */
+    public function showMySorties(SortieRepository $sr, ParticipantRepository $pr)
+    {
+        $currentUser = $this->getUser()->getUsername();
+        $user = $pr->findOneByUsername($currentUser);
+        $userId = $user->getIdParticipant();
+        $sorties = $sr->findAllByUser($userId);
+        return $this->render('sortie/mysorties.html.twig', [
+            'sorties' => $sorties
+        ]);
+    }
+
+        /**
      * @Route("/{idSortie}", name="sortie_show", methods={"GET"})
      * @param Sortie $sortie
      * @return Response
      */
     public function show(Sortie $sortie, ParticipantRepository $pr, SortieRepository $sr, $idSortie): Response
     {
+        dump($sortie);
         $inscrit = false;
         $currentUser = $this->getUser()->getUsername();
         $user = $pr->findOneByUsername($currentUser);
         $userId = $user->getIdParticipant();
         $userSorties = $sr->findAllByUser($userId);
-        dump($userSorties);
-        foreach ($userSorties as $sortie) {
-            if($sortie->getIdSortie() == $idSortie) {
+        foreach ($userSorties as $s) {
+            if($s->getIdSortie() == $idSortie) {
                 $inscrit = true;
                 break;
             }
@@ -150,55 +203,6 @@ class SortieController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
-    /**
-     * @Route("/inscire/{idSortie}", name="sortie_inscrire", methods={"GET","POST"})
-     * @param Request $request
-     * @param Sortie $sortie
-     * @return Response
-     */
-    public function inscire(Request $request, Sortie $sortie): Response
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-      //  if($sortie->getNbInscriptionMax() < sizeof($sortie->getListeParticipants())){
-            $sortie->addParticipant($user);
-            $entityManager->flush();
-            //}
-        return $this->render('sortie/inscrisSucces.html.twig', [
-            'sortie' => $sortie,
-            'inscrit'=>true]);
-    }
-
-    /**
-     * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
-     */
-    public function desinscrire(Sortie $sortie) {
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $sortie->removeParticipant($user);
-        $entityManager->flush();
-
-        return $this->render('sortie/inscrisSucces.html.twig', [
-            'sortie' => $sortie,
-            'inscrit'=>false]);
-    }
-
-    /**
-     * @Route("/sorties/mySorties", name="sortie_show_my_sorties", methods={"GET","POST"})
-     */
-    public function showMySorties(SortieRepository $sr, ParticipantRepository $pr) {
-        $currentUser = $this->getUser()->getUsername();
-        $user = $pr->findOneByUsername($currentUser);
-        $userId = $user->getIdParticipant();
-        $sorties = $sr->findAllByUser($userId);
-        return $this->render('sortie/mysorties.html.twig', [
-           'sorties' => $sorties
-        ]);
-
-    }
-
 
     /**
      * @Route("/{idSortie}", name="sortie_delete", methods={"DELETE"})
