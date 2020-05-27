@@ -40,6 +40,25 @@ class SortieRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllSearch($sortie){
+        $qb = $this->createQueryBuilder('s');
+        $qb -> join('s.campus', 'c')
+        ->addSelect('s.name',
+                    's.dateHeureDebut',
+                    's.dateLimiteInscription',
+                    's.nbInscriptionMax',
+                    's.etat',
+                    'c.nom');
+
+        $query= $qb->getQuery();
+        return $query
+            ->getResult();
+
+
+    //    if(!empty($s.campus))
+
+    }
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */

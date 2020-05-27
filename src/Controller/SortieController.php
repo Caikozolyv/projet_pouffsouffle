@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
+use App\Entity\SearchSortie;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
 use App\Form\SortieType;
 use App\Form\VilleType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -189,5 +191,19 @@ class SortieController extends AbstractController
         }
 
         return $this->redirectToRoute('sortie_index');
+    }
+
+    /**
+     * @Route ("/sortie/search", name="sortie_search")
+     */
+
+    public function listSearch()
+    {
+        $searchRepo = $this->getDoctrine()->getRepository(Sortie::class);
+        $searches = $searchRepo->findAllSearch();
+
+        return $this->render('sortie/index.html.twig', [
+            "searches"=>$searches,
+        ]);
     }
 }
