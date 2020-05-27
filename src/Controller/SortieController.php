@@ -36,22 +36,16 @@ class SortieController extends AbstractController
         if ($form->isSubmitted()) {
 
 
-
-
-
-            $newsearch = new Sortie();
-            $nform= $this->createForm(SearchSortieType::class, $newsearch);
-            $nform->handleRequest($request);
-
             return $this->redirectToRoute('sortie_index',[
-                'form'=> $nform->createView(),
             //'sorties' => $sortieRepository->notre requete sql(),
             ]);
         }
 
+        $laListe = $sortieRepository->findAll();
+
         return $this->render('sortie/index.html.twig', [
             'form'=> $form->createView(),
-            'sorties' => $sortieRepository->findAll(),
+            'sorties' => $laListe,
         ]);
     }
 
