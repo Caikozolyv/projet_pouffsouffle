@@ -78,19 +78,6 @@ class Participant implements UserInterface
      */
     private $listeSortiesOrga;
 
-    public function __construct()
-    {
-        $this->listeSortiesOrga = new ArrayCollection();
-    }
-    public function insciptionSortie(Participant $participant): self
-    {
-        if (!$this->listeParticipants->contains($participant)) {
-            $this->listeParticipants[] = $participant;
-            $participant->addSorty($this);
-        }
-        return $this;
-    }
-
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Sortie", mappedBy="listeParticipants")
      */
@@ -102,6 +89,29 @@ class Participant implements UserInterface
      * @ORM\JoinColumn(referencedColumnName="id_campus")
      */
     private $campus;
+
+    public function __construct()
+    {
+        $this->listeSortiesOrga = new ArrayCollection();
+    }
+
+    public function addSortie(Sortie $sortie): self
+    {
+        if (!$this->listeSortiesDuParticipant->contains($sortie)) {
+            $this->listeSortiesDuParticipant[] = $sortie;
+        }
+
+        return $this;
+    }
+
+    public function removeSortie(Sortie $sortie): self
+    {
+        if ($this->listeSortiesDuParticipant->contains($sortie)) {
+            $this->listeSortiesDuParticipant->removeElement($sortie);
+        }
+
+        return $this;
+    }
 
     /**
      * @return ArrayCollection
