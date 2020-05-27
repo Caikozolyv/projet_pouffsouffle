@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Entity\FindSortie;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuType;
@@ -28,12 +29,17 @@ class SortieController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
-        $searchSortie = new Sortie();
+        $searchSortie = new FindSortie();
         $form= $this->createForm(SearchSortieType::class, $searchSortie);
         $form->handleRequest($request);
 
+
+
         if ($form->isSubmitted()) {
 
+            dump($request->get('name'));
+            dump($form->getData());
+            die();
 
             return $this->redirectToRoute('sortie_index',[
             //'sorties' => $sortieRepository->notre requete sql(),
