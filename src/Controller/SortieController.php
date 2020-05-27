@@ -39,8 +39,8 @@ class SortieController extends AbstractController
             //'sorties' => $sortieRepository->notre requete sql(),
             ]);
         }
-
-        $laListe = $sortieRepository->findAll();
+     //   $searchSortie->setName('MacDo');
+        $laListe = $sortieRepository->findAllBySearch($searchSortie);
 
         return $this->render('sortie/index.html.twig', [
             'form'=> $form->createView(),

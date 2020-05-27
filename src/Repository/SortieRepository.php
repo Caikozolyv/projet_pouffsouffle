@@ -24,14 +24,14 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function findAllVisible() : array
+    public function findAllVisible(): array
     {
-        return  $this->findAll();
+        return $this->findAll();
     }
 
     public function findAllSortieQuery(): Query
     {
-        return $this-> findAll()
+        return $this->findAll()
             ->getQuery();
 
     }
@@ -45,22 +45,83 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAllSearch($sortie){
+    public function findAllManuel()
+    {
         $qb = $this->createQueryBuilder('s');
-        $qb -> join('s.campus', 'c')
-        ->addSelect('s.name',
-                    's.dateHeureDebut',
-                    's.dateLimiteInscription',
-                    's.nbInscriptionMax',
-                    's.etat',
-                    'c.nom');
+        $qb->join('s.campus', 'c')
+            ->addSelect('s.name')
+            ->addSelect('s.dateHeureDebut')
+            ->addSelect('s.duree')
+            ->addSelect('s.infosSortie')
+            ->addSelect('s.idSortie')
+            ->addSelect('s.dateLimiteInscription')
+            ->addSelect('s.nbInscriptionMax')
+            ->addSelect('s.etat')
+            ->addSelect('c.nom');
 
-        $query= $qb->getQuery();
+        $query = $qb->getQuery();
         return $query
             ->getResult();
 
 
-    //    if(!empty($s.campus))
+    }
+
+    public function findAllBySearch(Sortie $sortie)
+    {
+        //  $nom = 'MacDo';
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.campus', 'c')
+            ->addSelect('s.name')
+            ->addSelect('s.dateHeureDebut')
+            ->addSelect('s.duree')
+            ->addSelect('s.infosSortie')
+            ->addSelect('s.idSortie')
+            ->addSelect('s.dateLimiteInscription')
+            ->addSelect('s.nbInscriptionMax')
+            ->addSelect('s.etat')
+            ->addSelect('c.nom');
+
+        if ($sortie->getName()) {
+
+            $qb->setParameter('name', $sortie->getName())
+                ->andWhere('s.name = :name');
+        }
+
+        if ($sortie->getDateHeureDebut()) {
+            $qb->setParameter('dateHeureDebut', $sortie->getDateHeureDebut())
+                ->andWhere('s.dateHeureDebut = :dateHeureDebut');
+        }
+
+        if ($sortie->getOrganisateur()) {
+            $qb->setParameter('organisateur', $sortie->getOrganisateur())
+                ->andWhere('s.organisateur = :organisateur');
+        }
+
+        if ($sortie->getInscrit()) {
+            $qb->setParameter('inscrit', $sortie->getOrganisateur())
+                ->andWhere('s.inscrit = :inscrit');
+        }
+
+        if ($sortie->getPasInscrit()) {
+            $qb->setParameter('pasinscrit', $sortie->getPasInscrit())
+                ->andWhere('s.pasinscrit = :pasinscrit');
+        }
+
+        if ($sortie->getPassees()) {
+            $dateNow = new DateTime();
+            $qb->setParameter('dateToday', $dateNow, \Doctrine\DBAL\Types | Type::DATETIME)
+                ->andWhere('s.passees < :dateToday');
+        }
+
+        if ($sortie->getI)
+            //if ($sortie->get()){
+            //       $qb->setParameter('inscrit', $sortie->getOrganisateur())
+            //             ->andWhere('s.inscrit = :inscrit');
+            //    }
+
+            $query = $qb->getQuery();
+        return $query
+            ->getResult();
 
     }
     // /**
@@ -92,7 +153,7 @@ class SortieRepository extends ServiceEntityRepository
     }
     */
 
-    public function findSortie (
+    public function findSortie(
         Sortie $sortie,
         Lieu $lieu,
         Campus $campus,
@@ -101,14 +162,11 @@ class SortieRepository extends ServiceEntityRepository
 
     {
         return $this->createQueryBuilder('s')
-
             ->andWhere('s.sortie = :sortie')
             ->andWhere('s.lieu = :lieu')
             ->andWhere('s.campus = :campus')
             ->andWhere('s.ville = :ville')
-
             ->setParameter('sortie', $sortie->getIdSortie())
-
             ->setParameter('sortie', $sortie->getName()) //Pour la création d'un sortie
             ->setParameter('sortie', $sortie->getDateHeureDebut()) //Pour la création d'un sortie
             ->setParameter('sortie', $sortie->getDateLimiteInscription()) //Pour la création d'un sortie
@@ -118,7 +176,6 @@ class SortieRepository extends ServiceEntityRepository
 
             ->setParameter('etat', $etat->getId()) //Bizarre normalement je devrais avoir getIdEtat et pas getId
             ->setParameter('etat', $etat->getLibelle())
-
             ->setParameter('campus', $campus->getNom()) //Pour la création d'un sortie
 
             ->setParameter('lieu', $lieu->getNomLieu()) //Pour la création d'un sortie
