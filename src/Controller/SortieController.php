@@ -6,9 +6,9 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\LieuType;
-use App\Form\SearchSortieType;
 use App\Form\SortieType;
 use App\Form\VilleType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -150,8 +150,38 @@ class SortieController extends AbstractController
             $entityManager->flush();
             //}
         return $this->render('sortie/inscrisSucces.html.twig', [
-            'sortie' => $sortie,]);
+            'sortie' => $sortie,
+            'inscrit'=>true]);
     }
+
+    /**
+     * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
+     */
+    public function desinscrire(Sortie $sortie) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $sortie->removeParticipant($user);
+        $entityManager->flush();
+
+        return $this->render('sortie/inscrisSucces.html.twig', [
+            'sortie' => $sortie,
+            'inscrit'=>false]);
+    }
+
+    /**
+     * @Route("/sorties/mySorties", name="sortie_show_my_sorties", methods={"GET","POST"})
+     */
+    public function showMySorties(SortieRepository $sr, ParticipantRepository $pr) {
+        $currentUser = $this->getUser()->getUsername();
+        $user = $pr->findOneByUsername($currentUser);
+        $userId = $user->getIdParticipant();
+        $sorties = $sr->findAllByUser($userId);
+        return $this->render('sortie/mysorties.html.twig', [
+           'sorties' => $sorties
+        ]);
+
+    }
+
 
     /**
      * @Route("/{idSortie}", name="sortie_delete", methods={"DELETE"})
