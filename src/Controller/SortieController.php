@@ -128,13 +128,13 @@ class SortieController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $sortie->addParticipant($user);
-        $entityManager->flush();
-
+      //  if($sortie->getNbInscriptionMax() < sizeof($sortie->getListeParticipants())){
+            $sortie->addParticipant($user);
+            $entityManager->flush();
+            //}
         return $this->render('sortie/inscrisSucces.html.twig', [
             'sortie' => $sortie,]);
     }
-
 
     /**
      * @Route("/{idSortie}", name="sortie_delete", methods={"DELETE"})
