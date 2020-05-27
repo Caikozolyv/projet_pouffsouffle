@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuType;
@@ -54,46 +55,51 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $lieu = new Lieu();
-        #$ville = new Ville();
+        $campus = new Campus();
+        $ville = new Ville();
 
-        #$formVille = $this->createForm(VilleType::class, $ville);
-        #$formVille->handleRequest($request);
-
-        $formLieu = $this->createForm(LieuType::class, $lieu);
-        $formLieu->handleRequest($request);
 
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            #$sortie->setName();
-            #$sortie->setDateHeureDebut();
-            #$sortie->setDateLimiteInscription();
-            #$sortie->setNbInscriptionMax();
-            #$sortie->setDuree();
-            #$sortie->setInfosSortie();
+            $sortie->setName($sortie->getName());
+            $sortie->setDateHeureDebut($sortie->getDateHeureDebut());
+            $sortie->setDateLimiteInscription($sortie->getDateLimiteInscription());
+            $sortie->setNbInscriptionMax($sortie->getNbInscriptionMax());
+            $sortie->setDuree($sortie->getDuree());
+            $sortie->setInfosSortie($sortie->getInfosSortie());
 
-            #$sortie->setCampus();
-            #$sortie->setLieu();
-            #$lieu->setLatitude();
-            #$lieu->setLongitude();
+            $campus->setNom($campus->getName());
 
+            $lieu->setNomLieu($lieu->getNomLieu());
+            $lieu->setRue($lieu->getNomLieu());
+            $lieu->setLatitude($lieu->getLatitude());
+            $lieu->setLongitude($lieu->getLongitude());
 
-
+            //Ville ne marche toujours pas, tralalalalala
+            $ville->setNomVille($ville->getNomVille());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
 
             return $this->redirectToRoute('sortie');
+
+            //La création ne marche pas :(
+
+
+
         }
 
         return $this->render('sortie/new.html.twig', [
+
+            //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
+            //'sortie' => $sortieRepository->findSortie(),
+
             'sortie' => $sortie,
             'form' => $form->createView(),
-            'formLieu' =>$formLieu->createView(),
-            #'formVille' =>$formVille
         ]);
     }
 

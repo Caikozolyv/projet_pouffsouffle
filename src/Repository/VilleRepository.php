@@ -47,4 +47,21 @@ class VilleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findVille (Ville $ville)
+
+    {
+        return $this->createQueryBuilder('s')
+
+            ->andWhere('s.ville = :ville')
+
+            ->setParameter('ville', $ville->getId())
+            ->setParameter('ville', $ville->getNomVille())
+            ->setParameter('ville', $ville->getCodePostal())
+            ->setParameter('ville', $ville->getLieux()) //Liste
+
+            ->getQuery()
+            ->getResult();
+
+    }
 }
