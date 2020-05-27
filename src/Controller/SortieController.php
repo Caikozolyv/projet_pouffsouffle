@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +54,7 @@ class SortieController extends AbstractController
     /**
      * @Route("/new", name="sortie_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, VilleRepository $vr): Response
     {
         $sortie = new Sortie();
         $lieu = new Lieu();
@@ -60,6 +62,7 @@ class SortieController extends AbstractController
         $ville = new Ville();
 
 
+        $villes = $vr->findAll();
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
@@ -98,7 +101,7 @@ class SortieController extends AbstractController
 
             //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
             //'sortie' => $sortieRepository->findSortie(),
-
+            'villes' => $villes,
             'sortie' => $sortie,
             'form' => $form->createView(),
         ]);
