@@ -103,6 +103,14 @@ class Sortie
         return $this;
     }
 
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->listeParticipants->contains($participant)) {
+            $this->listeParticipants->removeElement($participant);
+        }
+        return $this;
+    }
+
     /**
      * @return mixed
      */
