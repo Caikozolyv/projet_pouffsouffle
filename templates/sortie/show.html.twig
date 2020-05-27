@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Sortie{% endblock %}
+{% block title %}Sortie "{{ sortie.name }}" - Sortir.com{% endblock %}
 
 {% block body %}
     <h1>Sortie "{{ sortie.name }}"</h1>
@@ -62,7 +62,8 @@
         <a class="btn btn-success" href="{{ path('sortie_inscrire', {'idSortie': sortie.idSortie}) }}">S'inscrire</a>
     {% endif %}
     <br>
-    <a class="btn btn-light" href="{{ path('sortie_index') }}">Retour à la Liste</a>
+    <a class="btn btn-light" href="{{ path('sortie_index') }}">Retour à la liste des sorties</a>
+    <a class="btn btn-light" href="{{ path('sortie_show_my_sorties') }}">Retour à la liste de mes sorties</a>
 
 
 
