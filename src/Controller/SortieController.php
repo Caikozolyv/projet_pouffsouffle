@@ -6,6 +6,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\LieuType;
+use App\Form\SearchSortieType;
 use App\Form\SortieType;
 use App\Form\VilleType;
 use App\Repository\ParticipantRepository;
