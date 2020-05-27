@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Sortir.com - Liste des sorties{% endblock %}
+
+{% block body %}
+    <h1>Liste de mes sorties</h1>
+
+{#    <div>#}
+{#        <a href="{{ path('search_sortie') }}" class="btn">Rechercher</a>#}
+{#    </div>#}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Date et heure de début</th>
+            <th>Durée</th>
+            <th>Date Limite d'inscription</th>
+            <th>Nombre d'inscriptions maximum</th>
+            <th>Infos Sortie</th>
+            <th>Etat</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sortie in sorties %}
+            <tr>
+                <td>{{ sortie.name }}</td>
+                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d') : '' }}</td>
+                <td>{{ sortie.duree ? sortie.duree|date('H:i:s') : '' }}</td>
+                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
+                <td>{{ sortie.nbInscriptionMax }}</td>
+                <td>{{ sortie.infosSortie }}</td>
+                <td>{{ sortie.etat }}</td>
+                <td>
+                    <a href="{{ path('sortie_show', {'idSortie': sortie.idSortie}) }}">Afficher</a>
+{#                    <a href="{{ path('sortie_desinscrire', {'idSortie': sortie.idSortie}) }}">edit</a>#}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">Aucunes données dans le tableau</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{#    <a href="{{ path('sortie_new') }}">Ajouter une Sortie</a>#}
+{% endblock %}

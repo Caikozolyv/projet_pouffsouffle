@@ -8,6 +8,7 @@ use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Form\VilleType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -133,6 +134,20 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/inscrisSucces.html.twig', [
             'sortie' => $sortie,]);
+    }
+
+    /**
+     * @Route("/sorties/mySorties", name="sortie_show_my_sorties", methods={"GET","POST"})
+     */
+    public function showMySorties(SortieRepository $sr, ParticipantRepository $pr) {
+        $currentUser = $this->getUser()->getUsername();
+        $user = $pr->findOneByUsername($currentUser);
+        $userId = $user->getIdParticipant();
+        $sorties = $sr->findAllByUser($userId);
+        return $this->render('sortie/mysorties.html.twig', [
+           'sorties' => $sorties
+        ]);
+
     }
 
 

@@ -31,6 +31,15 @@ class SortieRepository extends ServiceEntityRepository
             ->getQuery();
 
     }
+
+    public function findAllByUser($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere(':user MEMBER OF s.listeParticipants')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */
