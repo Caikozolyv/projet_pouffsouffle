@@ -8,7 +8,6 @@ use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Form\VilleType;
-use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -129,9 +128,10 @@ class SortieController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $sortie->addParticipant($user);
-        $entityManager->flush();
-
+      //  if($sortie->getNbInscriptionMax() < sizeof($sortie->getListeParticipants())){
+            $sortie->addParticipant($user);
+            $entityManager->flush();
+            //}
         return $this->render('sortie/inscrisSucces.html.twig', [
             'sortie' => $sortie,]);
     }
