@@ -133,7 +133,22 @@ class SortieController extends AbstractController
         $entityManager->flush();
 
         return $this->render('sortie/inscrisSucces.html.twig', [
-            'sortie' => $sortie,]);
+            'sortie' => $sortie,
+            'inscrit'=>true]);
+    }
+
+    /**
+     * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
+     */
+    public function desinscrire(Sortie $sortie) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $sortie->removeParticipant($user);
+        $entityManager->flush();
+
+        return $this->render('sortie/inscrisSucces.html.twig', [
+            'sortie' => $sortie,
+            'inscrit'=>false]);
     }
 
     /**
