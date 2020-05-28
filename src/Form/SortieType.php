@@ -9,6 +9,7 @@ use App\Entity\Ville;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -77,13 +78,15 @@ class SortieType extends AbstractType
             ])
 
             ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'))
+            ->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'))
             ->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
             }
 
-    protected function addElements(FormInterface $form, Ville $ville = null)
+    protected function addElements(FormInterface $form, Ville $ville = null, Lieu $lieu = null)
     {
         dump($ville);
         $lieux = array();
+        $lieuSelected = new Lieu();
 
         if ($ville) {
             $lr = $this->em->getRepository('LieuRepository');
@@ -94,17 +97,43 @@ class SortieType extends AbstractType
                 ->getResult();
         }
 
+        if ($lieu) {
+            $lr = $this->em->getRepository('LieuRepository');
+            $lieuSelected = $lr->createQueryBuilder('q')
+                ->andWhere("q.idLieu = :lieuId")
+                ->setParameter("lieuId", $lieu->getIdLieu())
+                ->getQuery()
+                ->getResult();
+        }
+//        dump($lieuSelected->getRue());
+
         $form->add('lieu', EntityType::class, [
             'class' => Lieu::class,
             'label' => "Lieu",
             'attr' => [
                 'disabled' => true
             ],
-            'query_builder' => function(EntityRepository $repository) {
-                return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-            }
-        ]
-        );
+            'choices' => $lieux
+        ])
+            ->add('rue', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Rue : ',
+                'data' => $lieuSelected
+            ])
+            ->add('latitude', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Latitude : ',
+                'data' => $lieuSelected
+            ])
+            ->add('longitude', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Longitude : ',
+                'data' => $lieuSelected
+            ]);
+
     }
 
     function onPreSubmit(FormEvent $event, VilleRepository $vr)
@@ -120,11 +149,18 @@ class SortieType extends AbstractType
 
     function onPreSetData(FormEvent $event)
     {
-        $sortie = $event->getData();
         $form = $event->getForm();
         $ville = $form->get('ville')->getData() ? $form->get('ville')->getData() : null;
-        dump($ville);
-        $this->addElements($form, $ville);
+//        $lieu = $form->get('lieu')->getData() ? $form->get('lieu')->getData() : null;
+        $this->addElements($form, $ville, null);
+    }
+
+    function onPostSetData(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $ville = $form->get('ville')->getData() ? $form->get('ville')->getData() : null;
+        $lieu = $form->get('lieu')->getData() ? $form->get('lieu')->getData() : null;
+        $this->addElements($form, $ville, $lieu);
     }
 
     public function configureOptions(OptionsResolver $resolver)

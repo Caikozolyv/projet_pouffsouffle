@@ -88,6 +88,24 @@ class SortieController extends AbstractController
     }
 
     /**
+     * @Route("/selectLieu", name="sortie_select_lieu", methods={"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function selectLieu(Request $request, LieuRepository $lr) {
+        $idLieu = $request->get('lieuId');
+        $lieu = $lr->find($idLieu);
+
+        $tabLieu[] = array(
+            "id" => $lieu->getIdLieu(),
+            "rue" => $lieu->getRue(),
+            "latitude" => $lieu->getLatitude(),
+            "longitude" => $lieu->getLongitude()
+        );
+        return new JsonResponse($tabLieu);
+    }
+
+    /**
      * @Route("/new", name="sortie_new", methods={"GET","POST"})
      */
     public function new(Request $request, VilleRepository $vr, LieuRepository $lr): Response

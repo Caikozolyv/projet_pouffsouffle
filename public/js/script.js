@@ -1,13 +1,16 @@
 var $ville = $('#sortie_ville');
 var lieu = $('#sortie_lieu');
+var rue = $('#sortie_rue');
+var latitude = $('#sortie_latitude');
+var longitude = $('#sortie_longitude');
 $ville.change(function () {
     var villeId = $(this).val();
     $.ajax({
-       url: '/ajax/selectVille',
+        url: '/ajax/selectVille',
         type: "GET",
         dataType: "JSON",
         data: {
-           villeId: villeId
+            villeId: villeId
         },
         success: function (lieux) {
             lieu.prop('disabled', false);
@@ -18,4 +21,24 @@ $ville.change(function () {
             });
         }
     });
+});
+
+lieu.change(function () {
+    var lieuId = $(this).val();
+    $.ajax({
+        url: '/ajax/selectLieu',
+        type: "GET",
+        dataType: "JSON",
+        data: {
+            lieuId: lieuId
+        },
+        success: function (lieuSelected) {
+            $.each(lieuSelected, function (key, value) {
+                rue.val(value.rue);
+                latitude.val(value.latitude);
+                longitude.val(value.longitude);
+            });
+            ;
+        }
+    })
 });

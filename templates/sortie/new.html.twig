@@ -26,25 +26,11 @@
 
                 {{ form_row(form.lieu) }}
 
-                <div class="text-type">
-                    <label for="rue">Rue</label>
-                    <input type="text" class="text-type" id="rue">
-                </div>
+                {{ form_row(form.rue) }}
 
-                <div class="text-type">
-                    <label for="codePostal">Code Postal</label>
-                    <input type="text" class="text-type" id="codePostal">
-                </div>
+                {{ form_row(form.latitude) }}
 
-                <div class="text-type">
-                    <label for="latitude">Latitude</label>
-                    <input type="text" class="text-type" id="latitude">
-                </div>
-
-                <div class="text-type">
-                    <label for="longitude">Longitude</label>
-                    <input type="text" class="text-type" id="longitude">
-                </div>
+                {{ form_row(form.longitude) }}
             </div>
         </div>
     </div>
