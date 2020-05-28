@@ -3,6 +3,7 @@
 {% block title %}Sortie "{{ sortie.name }}" - Sortir.com{% endblock %}
 
 {% block body %}
+
     <h1>Sortie "{{ sortie.name }}"</h1>
 
     <table class="table">
@@ -60,7 +61,14 @@
         </div>
     {% elseif inscrit == false %}
         <a class="btn btn-success" href="{{ path('sortie_inscrire', {'idSortie': sortie.idSortie}) }}">S'inscrire</a>
+        {% if complet | default(false) == true %}
+            <strong>Limite d'inscris déjà atteinte</strong>
+        {% endif %}
+        {% if dateLimite | default(false) == true %}
+            <strong>La date Limite d'inscription est atteinte</strong>
+        {% endif %}
     {% endif %}
+
     <br>
     <a class="btn btn-light" href="{{ path('sortie_index') }}">Retour à la liste des sorties</a>
     <a class="btn btn-light" href="{{ path('sortie_show_my_sorties') }}">Retour à la liste de mes sorties</a>
