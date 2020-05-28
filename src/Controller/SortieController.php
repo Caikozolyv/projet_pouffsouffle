@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Campus;
 use App\Entity\Etat;
-use App\Entity\Etat;
 use App\Entity\FindSortie;
 use App\Entity\Lieu;
 use App\Entity\Participant;
@@ -323,5 +322,4 @@ class SortieController extends AbstractController
             $em->flush();
         }
     }
-}
 }
