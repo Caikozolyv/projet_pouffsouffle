@@ -43,8 +43,8 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted()) {
 
-           // dump($request->get('name'));
-           // $form->getData();
+            // dump($request->get('name'));
+            // $form->getData();
             // die();
             $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
             return $this->render('sortie/index.html.twig',[
@@ -52,7 +52,7 @@ class SortieController extends AbstractController
                 'sorties' => $laListe,
             ]);
         }
-     //   $searchSortie->setName('MacDo');
+        //   $searchSortie->setName('MacDo');
         $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
 
         return $this->render('sortie/index.html.twig', [
@@ -71,6 +71,8 @@ class SortieController extends AbstractController
         $campus = new Campus();
         $ville = new Ville();
 
+        //Ligne rajout Victor pour Etat
+        $etatController = new EtatController();
 
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
@@ -93,6 +95,13 @@ class SortieController extends AbstractController
 
             //Ville ne marche toujours pas, tralalalalala
             $ville->setNomVille($ville->getNomVille());
+
+            //Lignes ajout Victor pour Etat
+            $repoEtats = $etatController->getDoctrine()->getManager()->getRepository();
+            $ouverte = $repoEtats->find(2);
+            $sortie->setEtat($ouverte);
+            $ouverte = $repoEtats->find(2);
+            $sortie->setEtat($ouverte);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
