@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Entity\Etat;
 use App\Entity\FindSortie;
 use App\Entity\Lieu;
 use App\Entity\Participant;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\Time;
 
 /**
  * @Route("/sortie")
@@ -32,6 +35,8 @@ class SortieController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
+       // $this->updateAllSorties();
+
         $searchSortie = new FindSortie();
         $form= $this->createForm(SearchSortieType::class, $searchSortie);
         $form->handleRequest($request);
@@ -162,6 +167,11 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
+     * @param Sortie $sortie
+     * @param EntityManagerInterface $em
+     * @param $idSortie
+     * @param SortieRepository $sr
+     * @return Response
      */
     public function desinscrire(Sortie $sortie, EntityManagerInterface $em, $idSortie, SortieRepository $sr) {
         $user = $this->getUser();
@@ -253,26 +263,58 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_index');
     }
 
-    public function updateAllSorties(EntityManagerInterface $em)
+    /**
+     */
+    public function updateAllSorties()
     {
-        $etat = new EtatController();
+        $em = $this->getDoctrine()->getManager();
+
+        //$etatController = new EtatController();
 
         $dateDuJour = new \DateTime();
 
-        $repoSorties = $this->getDoctrine()->getManager()->getRepository();
-        $repoEtats = $etat->getDoctrine()->getManager()->getRepository();
+        $repoSorties = $this->getDoctrine()->getManager()->getRepository(Sortie::class);
+        $repoEtats = $this->getDoctrine()->getManager()->getRepository(Etat::class);
 
-        $lesEtats = $repoEtats->findAll();
+        $ouverte = $repoEtats->find(2);
+        $cloturee = $repoEtats->find(3);
+        $enCours = $repoEtats->find(4);
+        $passee = $repoEtats->find(5);
+        $annulee = $repoEtats->find(6);
+
         $lesSorties = $repoSorties->findAll();
 
         foreach ($lesSorties as $sortie){
             if($sortie instanceof Sortie)
             {
-                if($sortie->getDateHeureDebut() > $dateDuJour){
-                    $sortie->setEtat();
+                if($sortie->getEtat() == null){
+                    $sortie->setEtat($ouverte);
                 }
+                if($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants()) &&
+                    $sortie->getEtat()==$cloturee)
+                {
+                    $sortie->setEtat($ouverte);
+                }
+                if($sortie->getNbInscriptionMax() == count($sortie->getListeParticipants()) &&
+                $sortie->getEtat()==$ouverte)
+                {
+                    $sortie->setEtat($cloturee);
+                }
+/*                if($sortie->getDateHeureDebut() > $dateDuJour &&
+                    ($sortie->getDateHeureDebut()+$laDuree)<$dateDuJour &&
+                    ($sortie->getEtat()==$ouverte || $sortie->getEtat()==$cloturee ))
+                {
+                    $sortie->setEtat($enCours);
+                }
+                if(($sortie->getDateHeureDebut()+$laDuree > $dateDuJour) &&
+                    $sortie->getEtat()==$enCours)
+                {
+                    $sortie->setEtat($passee);
+                }*/
+                $em->persist($sortie);
 
             }
+            $em->flush();
         }
     }
 }
