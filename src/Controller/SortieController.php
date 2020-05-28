@@ -249,4 +249,27 @@ class SortieController extends AbstractController
 
         return $this->redirectToRoute('sortie_index');
     }
+
+    public function updateAllSorties(EntityManagerInterface $em)
+    {
+        $etat = new EtatController();
+
+        $dateDuJour = new \DateTime();
+
+        $repoSorties = $this->getDoctrine()->getManager()->getRepository();
+        $repoEtats = $etat->getDoctrine()->getManager()->getRepository();
+
+        $lesEtats = $repoEtats->findAll();
+        $lesSorties = $repoSorties->findAll();
+
+        foreach ($lesSorties as $sortie){
+            if($sortie instanceof Sortie)
+            {
+                if($sortie->getDateHeureDebut() > $dateDuJour){
+                    $sortie->setEtat();
+                }
+
+            }
+        }
+    }
 }
