@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Campus;
 use App\Entity\FindSortie;
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
@@ -34,20 +35,22 @@ class SortieController extends AbstractController
         $form= $this->createForm(SearchSortieType::class, $searchSortie);
         $form->handleRequest($request);
 
+        $user =$this->getUser();
+        $participant = new Participant($user);
 
 
         if ($form->isSubmitted()) {
 
-            dump($request->get('name'));
-            dump($form->getData());
-            die();
+           // dump($request->get('name'));
+           // dump($form->getData());
+            //die();
 
             return $this->redirectToRoute('sortie_index',[
             //'sorties' => $sortieRepository->notre requete sql(),
             ]);
         }
      //   $searchSortie->setName('MacDo');
-        $laListe = $sortieRepository->findAllBySearch($searchSortie);
+        $laListe = $sortieRepository->findAllBySearch($searchSortie, $participant);
 
         return $this->render('sortie/index.html.twig', [
             'form'=> $form->createView(),

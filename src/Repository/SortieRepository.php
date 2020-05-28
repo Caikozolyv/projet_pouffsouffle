@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Campus;
 use App\Entity\Etat;
+use App\Entity\FindSortie;
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -66,7 +68,7 @@ class SortieRepository extends ServiceEntityRepository
 
     }
 
-    public function findAllBySearch(Sortie $sortie)
+    public function findAllBySearch(FindSortie $findSortie, Participant $participant)
     {
         //  $nom = 'MacDo';
         $qb = $this->createQueryBuilder('s');
@@ -81,39 +83,39 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('s.etat')
             ->addSelect('c.nom');
 
-        if ($sortie->getName()) {
+        if ($findSortie->getName()) {
 
-            $qb->setParameter('name', $sortie->getName())
+            $qb->setParameter('name', $findSortie->getName())
                 ->andWhere('s.name = :name');
         }
 
-        if ($sortie->getDateHeureDebut()) {
-            $qb->setParameter('dateHeureDebut', $sortie->getDateHeureDebut())
-                ->andWhere('s.dateHeureDebut = :dateHeureDebut');
+        if ($findSortie->getPremiereDate()) {
+            $qb->setParameter('premiereDate', $findSortie->getPremiereDate())
+                ->andWhere('s.premiereDate = :premiereDate');
         }
 
-        if ($sortie->getOrganisateur()) {
-            $qb->setParameter('organisateur', $sortie->getOrganisateur())
-                ->andWhere('s.organisateur = :organisateur');
+        if ($findSortie->getOrganisateur()) {
+            $qb->setParameter('organisateur', $findSortie->getOrganisateur())
+                ->andWhere('s.organisateurid = :user.id');
         }
 
-        if ($sortie->getInscrit()) {
-            $qb->setParameter('inscrit', $sortie->getOrganisateur())
+        if ($findSortie->isInscrit()) {
+            $qb->setParameter('inscrit', $findSortie->isInscrit())
                 ->andWhere('s.inscrit = :inscrit');
         }
 
-        if ($sortie->getPasInscrit()) {
-            $qb->setParameter('pasinscrit', $sortie->getPasInscrit())
+        if ($findSortie->isPasinscrit()) {
+            $qb->setParameter('pasinscrit', $findSortie->isPasinscrit())
                 ->andWhere('s.pasinscrit = :pasinscrit');
         }
 
-        if ($sortie->getPassees()) {
+        if ($findSortie->isPassees()) {
             $dateNow = new DateTime();
             $qb->setParameter('dateToday', $dateNow, \Doctrine\DBAL\Types | Type::DATETIME)
                 ->andWhere('s.passees < :dateToday');
         }
 
-        if ($sortie->getI)
+    //    if ($sortie->getI)
             //if ($sortie->get()){
             //       $qb->setParameter('inscrit', $sortie->getOrganisateur())
             //             ->andWhere('s.inscrit = :inscrit');
