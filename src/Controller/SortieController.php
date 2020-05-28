@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Campus;
 use App\Entity\FindSortie;
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
@@ -35,19 +36,21 @@ class SortieController extends AbstractController
         $form = $this->createForm(SearchSortieType::class, $searchSortie);
         $form->handleRequest($request);
 
+        $user =$this->getUser();
+        $participant = new Participant($user);
 
         if ($form->isSubmitted()) {
 
-            dump($request->get('name'));
-            dump($form->getData());
-            die();
+           // dump($request->get('name'));
+           // dump($form->getData());
+            //die();
 
             return $this->redirectToRoute('sortie_index', [
                 //'sorties' => $sortieRepository->notre requete sql(),
             ]);
         }
-
-        $laListe = $sortieRepository->findAll();
+     //   $searchSortie->setName('MacDo');
+        $laListe = $sortieRepository->findAllBySearch($searchSortie, $participant);
 
         return $this->render('sortie/index.html.twig', [
             'form' => $form->createView(),
@@ -257,5 +260,28 @@ class SortieController extends AbstractController
         }
 
         return $this->redirectToRoute('sortie_index');
+    }
+
+    public function updateAllSorties(EntityManagerInterface $em)
+    {
+        $etat = new EtatController();
+
+        $dateDuJour = new \DateTime();
+
+        $repoSorties = $this->getDoctrine()->getManager()->getRepository();
+        $repoEtats = $etat->getDoctrine()->getManager()->getRepository();
+
+        $lesEtats = $repoEtats->findAll();
+        $lesSorties = $repoSorties->findAll();
+
+        foreach ($lesSorties as $sortie){
+            if($sortie instanceof Sortie)
+            {
+                if($sortie->getDateHeureDebut() > $dateDuJour){
+                    $sortie->setEtat();
+                }
+
+            }
+        }
     }
 }
