@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/sortie")
@@ -119,13 +120,41 @@ class SortieController extends AbstractController
     {
         $user = $this->getUser();
         $sortie = $sr->find($idSortie);
-        //  if($sortie->getNbInscriptionMax() < sizeof($sortie->getListeParticipants())){
-        $sortie->addParticipant($user);
-        $em->flush();
-        //}
-        return $this->render('sortie/inscrisSucces.html.twig', [
+        $dateDuJour = new Date();
+        $inscrit = false;
+        $complet = false;
+        $dateLimite = false;
+        $inscriptionFinale = 0;
+
+        if($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())){
+            $inscriptionFinale=+1;
+        }
+        else{
+            $complet = true;
+        }
+
+        if($sortie->getDateLimiteInscription() > $dateDuJour){
+            $inscriptionFinale=+1;
+        }
+        else{
+            $dateLimite = true;
+        }
+
+        if($inscriptionFinale == 2){
+            $sortie->addParticipant($user);
+            $em->flush();
+            $inscrit = true;
+            return $this->render('sortie/inscrisSucces.html.twig', [
+                'sortie' => $sortie,
+                'inscrit'=> $inscrit]);
+        }
+        return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
-            'inscrit'=>true]);
+            'inscrit'=> $inscrit,
+            'complet'=>$complet,
+            'dateLimite'=>$dateLimite
+        ]);
+
     }
 
     /**
