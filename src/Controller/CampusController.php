@@ -21,7 +21,7 @@ class CampusController extends AbstractController
     public function index(CampusRepository $campusRepository): Response
     {
         return $this->render('campus/index.html.twig', [
-            'campuses' => $campusRepository->findAll(),
+            'campus' => $campusRepository->findAll(),
         ]);
     }
 
@@ -30,20 +30,20 @@ class CampusController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $campu = new Campus();
-        $form = $this->createForm(CampusType::class, $campu);
+        $campus = new Campus();
+        $form = $this->createForm(CampusType::class, $campus);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($campu);
+            $entityManager->persist($campus);
             $entityManager->flush();
 
             return $this->redirectToRoute('campus_index');
         }
 
         return $this->render('campus/new.html.twig', [
-            'campu' => $campu,
+            'campus' => $campus,
             'form' => $form->createView(),
         ]);
     }
@@ -51,19 +51,19 @@ class CampusController extends AbstractController
     /**
      * @Route("/{idCampus}", name="campus_show", methods={"GET"})
      */
-    public function show(Campus $campu): Response
+    public function show(Campus $campus): Response
     {
         return $this->render('campus/show.html.twig', [
-            'campu' => $campu,
+            'campu' => $campus,
         ]);
     }
 
     /**
      * @Route("/{idCampus}/edit", name="campus_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Campus $campu): Response
+    public function edit(Request $request, Campus $campus): Response
     {
-        $form = $this->createForm(CampusType::class, $campu);
+        $form = $this->createForm(CampusType::class, $campus);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,7 +73,7 @@ class CampusController extends AbstractController
         }
 
         return $this->render('campus/edit.html.twig', [
-            'campu' => $campu,
+            'campus' => $campus,
             'form' => $form->createView(),
         ]);
     }
@@ -81,11 +81,11 @@ class CampusController extends AbstractController
     /**
      * @Route("/{idCampus}", name="campus_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Campus $campu): Response
+    public function delete(Request $request, Campus $campus): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$campu->getIdCampus(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$campus->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($campu);
+            $entityManager->remove($campus);
             $entityManager->flush();
         }
 

@@ -14,13 +14,13 @@
             </tr>
         </thead>
         <tbody>
-        {% for campu in campuses %}
+        {% for campus in campus %}
             <tr>
-                <td>{{ campu.idCampus }}</td>
-                <td>{{ campu.nom }}</td>
+                <td>{{ campus.id }}</td>
+                <td>{{ campus.nom }}</td>
                 <td>
-                    <a href="{{ path('campus_show', {'idCampus': campu.idCampus}) }}">show</a>
-                    <a href="{{ path('campus_edit', {'idCampus': campu.idCampus}) }}">edit</a>
+                    <a href="{{ path('campus_show', {'idCampus': campus.id}) }}">show</a>
+                    <a href="{{ path('campus_edit', {'idCampus': campus.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
