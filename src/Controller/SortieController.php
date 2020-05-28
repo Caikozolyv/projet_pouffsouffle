@@ -32,9 +32,8 @@ class SortieController extends AbstractController
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
         $searchSortie = new FindSortie();
-        $form= $this->createForm(SearchSortieType::class, $searchSortie);
+        $form = $this->createForm(SearchSortieType::class, $searchSortie);
         $form->handleRequest($request);
-
 
 
         if ($form->isSubmitted()) {
@@ -43,15 +42,15 @@ class SortieController extends AbstractController
             dump($form->getData());
             die();
 
-            return $this->redirectToRoute('sortie_index',[
-            //'sorties' => $sortieRepository->notre requete sql(),
+            return $this->redirectToRoute('sortie_index', [
+                //'sorties' => $sortieRepository->notre requete sql(),
             ]);
         }
 
         $laListe = $sortieRepository->findAll();
 
         return $this->render('sortie/index.html.twig', [
-            'form'=> $form->createView(),
+            'form' => $form->createView(),
             'sorties' => $laListe,
         ]);
     }
@@ -65,6 +64,9 @@ class SortieController extends AbstractController
         $lieu = new Lieu();
         $campus = new Campus();
         $ville = new Ville();
+
+        //Ligne rajout Victor pour Etat
+        $etatController = new EtatController();
 
 
         $form = $this->createForm(SortieType::class, $sortie);
@@ -88,6 +90,14 @@ class SortieController extends AbstractController
 
             //Ville ne marche toujours pas, tralalalalala
             $ville->setNomVille($ville->getNomVille());
+
+            //Lignes ajout Victor pour Etat
+            $repoEtats = $etatController->getDoctrine()->getManager()->getRepository();
+            $ouverte = $repoEtats->find(2);
+            $sortie->setEtat($ouverte);
+            $ouverte = $repoEtats->find(2);
+            $sortie->setEtat($ouverte);
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
@@ -126,33 +136,31 @@ class SortieController extends AbstractController
         $dateLimite = false;
         $inscriptionFinale = 0;
 
-        if($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())){
-            $inscriptionFinale=+1;
-        }
-        else{
+        if ($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())) {
+            $inscriptionFinale = +1;
+        } else {
             $complet = true;
         }
 
-        if($sortie->getDateLimiteInscription() > $dateDuJour){
-            $inscriptionFinale=+1;
-        }
-        else{
+        if ($sortie->getDateLimiteInscription() > $dateDuJour) {
+            $inscriptionFinale = +1;
+        } else {
             $dateLimite = true;
         }
 
-        if($inscriptionFinale == 2){
+        if ($inscriptionFinale == 2) {
             $sortie->addParticipant($user);
             $em->flush();
             $inscrit = true;
             return $this->render('sortie/inscrisSucces.html.twig', [
                 'sortie' => $sortie,
-                'inscrit'=> $inscrit]);
+                'inscrit' => $inscrit]);
         }
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
-            'inscrit'=> $inscrit,
-            'complet'=>$complet,
-            'dateLimite'=>$dateLimite
+            'inscrit' => $inscrit,
+            'complet' => $complet,
+            'dateLimite' => $dateLimite
         ]);
 
     }
@@ -160,7 +168,8 @@ class SortieController extends AbstractController
     /**
      * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
      */
-    public function desinscrire(Sortie $sortie, EntityManagerInterface $em, $idSortie, SortieRepository $sr) {
+    public function desinscrire(Sortie $sortie, EntityManagerInterface $em, $idSortie, SortieRepository $sr)
+    {
         $user = $this->getUser();
         $sortie = $sr->find($idSortie);
         $sortie->removeParticipant($user);
@@ -168,7 +177,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/inscrisSucces.html.twig', [
             'sortie' => $sortie,
-            'inscrit'=>false]);
+            'inscrit' => false]);
     }
 
     /**
@@ -185,7 +194,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-        /**
+    /**
      * @Route("/{idSortie}", name="sortie_show", methods={"GET"})
      * @param Sortie $sortie
      * @return Response
@@ -199,7 +208,7 @@ class SortieController extends AbstractController
         $userId = $user->getIdParticipant();
         $userSorties = $sr->findAllByUser($userId);
         foreach ($userSorties as $s) {
-            if($s->getIdSortie() == $idSortie) {
+            if ($s->getIdSortie() == $idSortie) {
                 $inscrit = true;
                 break;
             }
@@ -241,7 +250,7 @@ class SortieController extends AbstractController
      */
     public function delete(Request $request, Sortie $sortie): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$sortie->getIdSortie(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $sortie->getIdSortie(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sortie);
             $entityManager->flush();
