@@ -1,28 +1,32 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}Ville index{% endblock %}
 
 {% block body %}
-    <h1>Ville index</h1>
+    <h1 class="text-center">Gérer les villes</h1>
+
+
+
+
+
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>NomVille</th>
-                <th>CodePostal</th>
-                <th>actions</th>
+                <th>Ville</th>
+                <th>Code postal</th>
+                <th>Actions</th>
             </tr>
         </thead>
+
         <tbody>
         {% for ville in villes %}
             <tr>
-                <td>{{ ville.id }}</td>
                 <td>{{ ville.nomVille }}</td>
                 <td>{{ ville.codePostal }}</td>
                 <td>
-                    <a href="{{ path('ville_show', {'id': ville.id}) }}">show</a>
-                    <a href="{{ path('ville_edit', {'id': ville.id}) }}">edit</a>
+                    <a href="{{ path('ville_edit', {'id': ville.id}) }}">Modifier</a>
+                    <a href="{{ path('ville_delete', {'id': ville.id}) }}">Supprimer</a>
                 </td>
             </tr>
         {% else %}

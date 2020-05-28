@@ -9,18 +9,18 @@
         <tbody>
             <tr>
                 <th>IdCampus</th>
-                <td>{{ campu.idCampus }}</td>
+                <td>{{ campus.id }}</td>
             </tr>
             <tr>
                 <th>Nom</th>
-                <td>{{ campu.nom }}</td>
+                <td>{{ campus.nom }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('campus_index') }}">back to list</a>
 
-    <a href="{{ path('campus_edit', {'idCampus': campu.idCampus}) }}">edit</a>
+    <a href="{{ path('campus_edit', {'idCampus': campus.id}) }}">edit</a>
 
     {{ include('campus/_delete_form.html.twig') }}
 {% endblock %}

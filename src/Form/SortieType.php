@@ -32,7 +32,7 @@ class SortieType extends AbstractType
                 'label' => "Durée : "
             ])
             ->add('infosSortie', TextareaType::class, [
-                'label' =>"Description et infos : ",
+                'label' => "Description et infos : ",
                 'attr' => [
                     'class' => 'overview-txt'
                 ]
@@ -40,7 +40,7 @@ class SortieType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'label' => "Campus",
-                'query_builder' => function(EntityRepository $repository) {
+                'query_builder' => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('c')->orderBy('c.nom', 'ASC');
                 }
             ])
@@ -49,24 +49,20 @@ class SortieType extends AbstractType
             #Help, Au secours, A votre bon coeur pour aider!!!
 
             #->add('ville', EntityType::class, [
-                #'class' =>Ville::class,
-                #'label' => "ville",
-                #'query_builder' => function(EntityRepository $repository) {
-                    #return $repository->createQueryBuilder('c')->orderBy('c.nomVille', 'ASC');
-                #}
+            #'class' =>Ville::class,
+            #'label' => "ville",
+            #'query_builder' => function(EntityRepository $repository) {
+            #return $repository->createQueryBuilder('c')->orderBy('c.nomVille', 'ASC');
+            #}
             #])
-
-
 
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'label' => "Lieu",
-                'query_builder' => function(EntityRepository $repository) {
+                'query_builder' => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-    }
-            ])
-
-        ;
+                }
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
