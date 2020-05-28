@@ -119,7 +119,7 @@ class SortieController extends AbstractController
         $etatController = new EtatController();
 
 
-        $villes = $vr->findAll();
+//        $villes = $vr->findAll();
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
@@ -165,7 +165,7 @@ class SortieController extends AbstractController
 
             //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
             //'sortie' => $sortieRepository->findSortie(),
-            'villes' => $villes,
+//            'villes' => $villes,
             'sortie' => $sortie,
             'form' => $form->createView(),
         ]);
