@@ -21,17 +21,7 @@
 
                 {{ form_row(form.campus) }}
 
-                <div class="text-type">
-                    <label for="ville">Ville</label>
-                    <select>
-                        {% for ville in villes %}
-                            <option>{{ ville }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                {#Je n'arrive pas à afficher la liste des villes#}
-                {#{{ form_row(form.ville) }}#}
+                {{ form_row(form.ville) }}
 
 
                 {{ form_row(form.lieu) }}
@@ -70,4 +60,7 @@
     </div>
     {# <a href="{{ path('sortie_index') }}">back to list</a> #}
 
+{% endblock %}
+{% block script %}
+    <script src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
