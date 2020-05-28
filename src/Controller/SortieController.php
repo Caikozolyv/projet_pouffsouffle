@@ -74,35 +74,17 @@ class SortieController extends AbstractController
      * @return JsonResponse
      */
     public function selectVille(Request $request, LieuRepository $lr) {
-//        if($request->isXmlHttpRequest()) {
-//            if($request->get('idVille')) {
                 $idVille = $request->get('villeId');
                 $lieux = $lr->findLieuxByVilleId($idVille);
                 $tabLieux = array();
-//                $i = 0;
-//
+
                 foreach ($lieux as $lieu) {
-//                    $tabLieux[$i]['id'] = $lieu->getIdLieu();
-//                    $tabLieux[$i]['nom'] = $lieu->getNomLieu();
-//                    $i++;
                     $tabLieux[] = array(
                         "id" => $lieu->getIdLieu(),
                         "name" => $lieu->getNomLieu()
                     );
                 }
                 return new JsonResponse($tabLieux);
-//
-//                $response = new Response();
-//                $data = json_encode($tabLieux);
-//                $response->headers->set('Content-Type', 'application/json');
-//                $response->setContent($data);
-//
-//                return $response;
-//            }
-//        } else {
-//            return new Response('no ajax');
-//        }
-//        return new Response('no ajax');
     }
 
     /**

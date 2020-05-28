@@ -66,9 +66,6 @@ class SortieType extends AbstractType
                 }
             ])
 
-            #La classe Ville ne veut TOUJOURS pas s'injecter dans le formulaire
-            #Help, Au secours, A votre bon coeur pour aider!!!
-
             ->add('ville', EntityType::class, [
                 'mapped' => false,
                 'class' => Ville::class,
@@ -78,30 +75,7 @@ class SortieType extends AbstractType
                     return $repository->createQueryBuilder('c')->orderBy('c.nomVille', 'ASC');
                 }
             ])
-//            ->add('lieu', EntityType::class, [
-//                        'class' => Lieu::class,
-//                        'label' => "Lieu",
-//                        'disabled' => true,
-//                        'query_builder' => function(EntityRepository $repository) {
-//                            return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-//                        }
-//                    ])
-//            ->addEventListener(
-//                FormEvents::PRE_SET_DATA,
-//                function (FormEvent $event) {
-//                    $form = $event->getForm();
-//                    $data = $event->getData();
-//                    dump($data);
-//                    $ville = $data->getVille();
-//                    $lieux = null === $ville ? [] : $ville->getLieux();
-//
-//                    $form->add('lieu', EntityType::class, [
-//                       'class'=> Lieu::class,
-//                       'choices' => $lieux
-//                    ]);
-//                }
-//            );
-//        }
+
             ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'))
             ->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
             }
@@ -138,7 +112,6 @@ class SortieType extends AbstractType
         $form = $event->getForm();
         $data = $event->getData();
 
-        // Search for selected City and convert it into an Entity
         $ville = $vr->find($data['ville']);
         dump($ville);
 
@@ -153,26 +126,6 @@ class SortieType extends AbstractType
         dump($ville);
         $this->addElements($form, $ville);
     }
-
-
-//            ->addEventListener(FormEvents::PRE_SET_DATA,
-//                function (FormEvent $event) {
-//                    $form = $event->getForm();
-////                    $data = $event->getData();
-//                    $ville = $form->get('ville')->getData();
-//                    dump($ville);
-//                    $lieux = null === $ville ? [] : $ville->getLieux();
-//
-//                    $form->add('lieu', EntityType::class, [
-//                        'class' => Lieu::class,
-//                        'label' => "Lieu",
-//                        'choices' => $lieux
-////                        'query_builder' => function(EntityRepository $repository) {
-////                            return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-////                        }
-//                    ]);
-//
-//                })
 
     public function configureOptions(OptionsResolver $resolver)
     {
