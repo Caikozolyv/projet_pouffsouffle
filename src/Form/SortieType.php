@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,13 +41,19 @@ class SortieType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => "Nom de la sortie : "
             ])
-            ->add('dateHeureDebut')
-            ->add('dateLimiteInscription')
+            ->add('dateHeureDebut', DateTimeType::class, array(
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text'
+            ))
+            ->add('dateLimiteInscription',DateTimeType::class, array(
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text'
+            ))
             ->add('nbInscriptionMax', IntegerType::class, [
                 'label' => "Nombre de places : "
             ])
             ->add('duree', IntegerType::class, [
-                'label' => "Durée : "
+                'label' => "Durée (en h): "
             ])
             ->add('infosSortie', TextareaType::class, [
                 'label' => "Description et infos : ",
@@ -86,6 +93,7 @@ class SortieType extends AbstractType
         $lieux = array();
         $lieuSelected = new Lieu();
 
+
         if ($ville) {
             $lr = $this->em->getRepository(Lieu::class);
             $lieux = $lr->createQueryBuilder('q')
@@ -109,7 +117,7 @@ class SortieType extends AbstractType
             'class' => Lieu::class,
             'label' => "Lieu",
             'attr' => [
-                'disabled' => true
+                'disabled' => false
             ],
             'choices' => $lieux
         ])

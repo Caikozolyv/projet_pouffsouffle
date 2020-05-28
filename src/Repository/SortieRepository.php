@@ -9,6 +9,7 @@ use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
+use Cassandra\Date;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
@@ -73,7 +74,6 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findAllBySearch(FindSortie $findSortie, Participant $participant)
     {
-        //  $nom = 'MacDo';
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.campus', 'c')
             ->addSelect('s.name')
@@ -85,30 +85,32 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('s.nbInscriptionMax')
             ->addSelect('s.etat')
             ->addSelect('c.nom');
-        //    ->addSelect('s.organisateurId');
 
-        if ($findSortie->getName()) {
+        if ($findSortie->getName() != null) {
 
             $qb->setParameter('name', '%'.$findSortie->getName().'%')
                 ->andWhere('s.name = :name');
         }
+        $dateBasique = new \DateTime();
+        $dateBasique->setTimestamp(1420070400);
 
-        if ($findSortie->getPremiereDate()) {
+        if ($findSortie->getPremiereDate() != $dateBasique) {
             $qb->setParameter('premiereDate', $findSortie->getPremiereDate())
                 ->andWhere('s.dateHeureDebut > :premiereDate');
         }
 
-        if ($findSortie->getDeuxiemeDate()) {
+        if ($findSortie->getDeuxiemeDate() != $dateBasique) {
             $qb->setParameter('deuxiemeDate', $findSortie->getDeuxiemeDate())
                 ->andWhere('s.dateHeureDebut < :deuxiemeDate');
         }
 
-      //  if ($findSortie->getOrganisateur()) {
-      //      $qb->setParameter('organisateur', $participant)
-      //          ->andWhere('s.organisateurId = :organisateur');
-      //  }
+        if ($findSortie->getOrganisateur() != false) {
+            $qb->join('s.organisateur', 'o')
+                ->setParameter('organisateur', $participant->getIdParticipant())
+                ->andWhere('o.idParticipant = :organisateur');
+        }
 
-        if ($findSortie->isInscrit()) {
+        if ($findSortie->isInscrit() != false) {
             $listeId = [-1,-2,-3,-2,-5,-6];
             $liste = $participant->getListeSortiesDuParticipant();
 
@@ -119,29 +121,20 @@ class SortieRepository extends ServiceEntityRepository
                     }
                 }
             }
-
-
             $qb->setParameter('ids', array_values($listeId))
                 ->andWhere('s.idSortie IN (:ids)');
         }
 
-        if ($findSortie->isPasinscrit()) {
+/*        if ($findSortie->isPasinscrit() != false) {
             $qb->setParameter('pasinscrit', $findSortie->isPasinscrit())
                 ->andWhere('s.pasinscrit = :pasinscrit');
+        }*/
+
+        if ($findSortie->isPassees() != false) {
+            $passee = "Activité passée";
+            $qb->setParameter('passee', $passee)
+                ->andWhere('s.etat LIKE :passee');
         }
-
-        if ($findSortie->isPassees()) {
-            $dateNow = new DateTime();
-            $qb->setParameter('dateToday', $dateNow, \Doctrine\DBAL\Types | Type::DATETIME)
-                ->andWhere('s.passees < :dateToday');
-        }
-
-    //    if ($sortie->getI)
-            //if ($sortie->get()){
-            //       $qb->setParameter('inscrit', $sortie->getOrganisateur())
-            //             ->andWhere('s.inscrit = :inscrit');
-            //    }
-
             $query = $qb->getQuery();
         return $query
             ->getResult();

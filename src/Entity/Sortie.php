@@ -27,9 +27,8 @@ class Sortie
     private $name;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
-
     private $dateHeureDebut;
 
     /**
