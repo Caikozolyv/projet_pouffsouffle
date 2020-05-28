@@ -85,7 +85,7 @@ class Participant implements UserInterface
     private $listeSortiesDuParticipant;
 
     /**
-     * @ORM\ManyToONe(targetEntity="App\Entity\Campus", inversedBy="listeParticipants")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campus", inversedBy="listeParticipants")
      * @ORM\JoinColumn(referencedColumnName="id_campus")
      */
     private $campus;

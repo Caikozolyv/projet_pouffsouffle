@@ -12,10 +12,14 @@ use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
 use App\Form\SortieType;
+use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Repository\VilleRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,6 +66,43 @@ class SortieController extends AbstractController
             'form'=> $form->createView(),
             'sorties' => $laListe,
         ]);
+    }
+
+    /**
+     * @Route("/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function selectVille(Request $request, LieuRepository $lr) {
+//        if($request->isXmlHttpRequest()) {
+//            if($request->get('idVille')) {
+                $idVille = $request->get('villeId');
+                $lieux = $lr->findLieuxByVilleId($idVille);
+                $tabLieux = array();
+//                $i = 0;
+//
+                foreach ($lieux as $lieu) {
+//                    $tabLieux[$i]['id'] = $lieu->getIdLieu();
+//                    $tabLieux[$i]['nom'] = $lieu->getNomLieu();
+//                    $i++;
+                    $tabLieux[] = array(
+                        "id" => $lieu->getIdLieu(),
+                        "name" => $lieu->getNomLieu()
+                    );
+                }
+                return new JsonResponse($tabLieux);
+//
+//                $response = new Response();
+//                $data = json_encode($tabLieux);
+//                $response->headers->set('Content-Type', 'application/json');
+//                $response->setContent($data);
+//
+//                return $response;
+//            }
+//        } else {
+//            return new Response('no ajax');
+//        }
+//        return new Response('no ajax');
     }
 
     /**
@@ -123,8 +164,7 @@ class SortieController extends AbstractController
 
             //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
             //'sortie' => $sortieRepository->findSortie(),
-
-            'sortie' => $sortie,
+//            'sortie' => $sortie,
             'form' => $form->createView(),
         ]);
     }
