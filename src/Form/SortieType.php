@@ -50,7 +50,7 @@ class SortieType extends AbstractType
                 'label' => "Durée : "
             ])
             ->add('infosSortie', TextareaType::class, [
-                'label' =>"Description et infos : ",
+                'label' => "Description et infos : ",
                 'attr' => [
                     'class' => 'overview-txt'
                 ]
@@ -61,13 +61,10 @@ class SortieType extends AbstractType
                 ],
                 'class' => Campus::class,
                 'label' => "Campus",
-                'query_builder' => function(EntityRepository $repository) {
+                'query_builder' => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('c')->orderBy('c.nom', 'ASC');
                 }
             ])
-
-            #La classe Ville ne veut TOUJOURS pas s'injecter dans le formulaire
-            #Help, Au secours, A votre bon coeur pour aider!!!
 
             ->add('ville', EntityType::class, [
                 'mapped' => false,
@@ -78,38 +75,17 @@ class SortieType extends AbstractType
                     return $repository->createQueryBuilder('c')->orderBy('c.nomVille', 'ASC');
                 }
             ])
-//            ->add('lieu', EntityType::class, [
-//                        'class' => Lieu::class,
-//                        'label' => "Lieu",
-//                        'disabled' => true,
-//                        'query_builder' => function(EntityRepository $repository) {
-//                            return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-//                        }
-//                    ])
-//            ->addEventListener(
-//                FormEvents::PRE_SET_DATA,
-//                function (FormEvent $event) {
-//                    $form = $event->getForm();
-//                    $data = $event->getData();
-//                    dump($data);
-//                    $ville = $data->getVille();
-//                    $lieux = null === $ville ? [] : $ville->getLieux();
-//
-//                    $form->add('lieu', EntityType::class, [
-//                       'class'=> Lieu::class,
-//                       'choices' => $lieux
-//                    ]);
-//                }
-//            );
-//        }
+
             ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'))
+            ->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'))
             ->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
             }
 
-    protected function addElements(FormInterface $form, Ville $ville = null)
+    protected function addElements(FormInterface $form, Ville $ville = null, Lieu $lieu = null)
     {
         dump($ville);
         $lieux = array();
+        $lieuSelected = new Lieu();
 
         if ($ville) {
             $lr = $this->em->getRepository('LieuRepository');
@@ -120,17 +96,43 @@ class SortieType extends AbstractType
                 ->getResult();
         }
 
+        if ($lieu) {
+            $lr = $this->em->getRepository('LieuRepository');
+            $lieuSelected = $lr->createQueryBuilder('q')
+                ->andWhere("q.idLieu = :lieuId")
+                ->setParameter("lieuId", $lieu->getIdLieu())
+                ->getQuery()
+                ->getResult();
+        }
+//        dump($lieuSelected->getRue());
+
         $form->add('lieu', EntityType::class, [
             'class' => Lieu::class,
             'label' => "Lieu",
             'attr' => [
                 'disabled' => true
             ],
-            'query_builder' => function(EntityRepository $repository) {
-                return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-            }
-        ]
-        );
+            'choices' => $lieux
+        ])
+            ->add('rue', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Rue : ',
+                'data' => $lieuSelected
+            ])
+            ->add('latitude', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Latitude : ',
+                'data' => $lieuSelected
+            ])
+            ->add('longitude', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Longitude : ',
+                'data' => $lieuSelected
+            ]);
+
     }
 
     function onPreSubmit(FormEvent $event, VilleRepository $vr)
@@ -138,7 +140,6 @@ class SortieType extends AbstractType
         $form = $event->getForm();
         $data = $event->getData();
 
-        // Search for selected City and convert it into an Entity
         $ville = $vr->find($data['ville']);
         dump($ville);
 
@@ -147,32 +148,19 @@ class SortieType extends AbstractType
 
     function onPreSetData(FormEvent $event)
     {
-        $sortie = $event->getData();
         $form = $event->getForm();
         $ville = $form->get('ville')->getData() ? $form->get('ville')->getData() : null;
-        dump($ville);
-        $this->addElements($form, $ville);
+//        $lieu = $form->get('lieu')->getData() ? $form->get('lieu')->getData() : null;
+        $this->addElements($form, $ville, null);
     }
 
-
-//            ->addEventListener(FormEvents::PRE_SET_DATA,
-//                function (FormEvent $event) {
-//                    $form = $event->getForm();
-////                    $data = $event->getData();
-//                    $ville = $form->get('ville')->getData();
-//                    dump($ville);
-//                    $lieux = null === $ville ? [] : $ville->getLieux();
-//
-//                    $form->add('lieu', EntityType::class, [
-//                        'class' => Lieu::class,
-//                        'label' => "Lieu",
-//                        'choices' => $lieux
-////                        'query_builder' => function(EntityRepository $repository) {
-////                            return $repository->createQueryBuilder('c')->orderBy('c.nomLieu', 'ASC');
-////                        }
-//                    ]);
-//
-//                })
+    function onPostSetData(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $ville = $form->get('ville')->getData() ? $form->get('ville')->getData() : null;
+        $lieu = $form->get('lieu')->getData() ? $form->get('lieu')->getData() : null;
+        $this->addElements($form, $ville, $lieu);
+    }
 
     public function configureOptions(OptionsResolver $resolver)
     {

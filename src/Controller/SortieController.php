@@ -74,35 +74,35 @@ class SortieController extends AbstractController
      * @return JsonResponse
      */
     public function selectVille(Request $request, LieuRepository $lr) {
-//        if($request->isXmlHttpRequest()) {
-//            if($request->get('idVille')) {
                 $idVille = $request->get('villeId');
                 $lieux = $lr->findLieuxByVilleId($idVille);
                 $tabLieux = array();
-//                $i = 0;
-//
+
                 foreach ($lieux as $lieu) {
-//                    $tabLieux[$i]['id'] = $lieu->getIdLieu();
-//                    $tabLieux[$i]['nom'] = $lieu->getNomLieu();
-//                    $i++;
                     $tabLieux[] = array(
                         "id" => $lieu->getIdLieu(),
                         "name" => $lieu->getNomLieu()
                     );
                 }
                 return new JsonResponse($tabLieux);
-//
-//                $response = new Response();
-//                $data = json_encode($tabLieux);
-//                $response->headers->set('Content-Type', 'application/json');
-//                $response->setContent($data);
-//
-//                return $response;
-//            }
-//        } else {
-//            return new Response('no ajax');
-//        }
-//        return new Response('no ajax');
+    }
+
+    /**
+     * @Route("/selectLieu", name="sortie_select_lieu", methods={"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function selectLieu(Request $request, LieuRepository $lr) {
+        $idLieu = $request->get('lieuId');
+        $lieu = $lr->find($idLieu);
+
+        $tabLieu[] = array(
+            "id" => $lieu->getIdLieu(),
+            "rue" => $lieu->getRue(),
+            "latitude" => $lieu->getLatitude(),
+            "longitude" => $lieu->getLongitude()
+        );
+        return new JsonResponse($tabLieu);
     }
 
     /**
@@ -119,6 +119,7 @@ class SortieController extends AbstractController
         $etatController = new EtatController();
 
 
+        $villes = $vr->findAll();
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
@@ -164,7 +165,8 @@ class SortieController extends AbstractController
 
             //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
             //'sortie' => $sortieRepository->findSortie(),
-//            'sortie' => $sortie,
+            'villes' => $villes,
+            'sortie' => $sortie,
             'form' => $form->createView(),
         ]);
     }
