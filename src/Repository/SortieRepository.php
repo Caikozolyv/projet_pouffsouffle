@@ -12,6 +12,7 @@ use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\IsNull;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -68,6 +69,8 @@ class SortieRepository extends ServiceEntityRepository
 
     }
 
+
+
     public function findAllBySearch(FindSortie $findSortie, Participant $participant)
     {
         //  $nom = 'MacDo';
@@ -82,26 +85,44 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('s.nbInscriptionMax')
             ->addSelect('s.etat')
             ->addSelect('c.nom');
+        //    ->addSelect('s.organisateurId');
 
         if ($findSortie->getName()) {
 
-            $qb->setParameter('name', $findSortie->getName())
+            $qb->setParameter('name', '%'.$findSortie->getName().'%')
                 ->andWhere('s.name = :name');
         }
 
         if ($findSortie->getPremiereDate()) {
             $qb->setParameter('premiereDate', $findSortie->getPremiereDate())
-                ->andWhere('s.premiereDate = :premiereDate');
+                ->andWhere('s.dateHeureDebut > :premiereDate');
         }
 
-        if ($findSortie->getOrganisateur()) {
-            $qb->setParameter('organisateur', $findSortie->getOrganisateur())
-                ->andWhere('s.organisateurid = :user.id');
+        if ($findSortie->getDeuxiemeDate()) {
+            $qb->setParameter('deuxiemeDate', $findSortie->getDeuxiemeDate())
+                ->andWhere('s.dateHeureDebut < :deuxiemeDate');
         }
+
+      //  if ($findSortie->getOrganisateur()) {
+      //      $qb->setParameter('organisateur', $participant)
+      //          ->andWhere('s.organisateurId = :organisateur');
+      //  }
 
         if ($findSortie->isInscrit()) {
-            $qb->setParameter('inscrit', $findSortie->isInscrit())
-                ->andWhere('s.inscrit = :inscrit');
+            $listeId = [-1,-2,-3,-2,-5,-6];
+            $liste = $participant->getListeSortiesDuParticipant();
+
+            if($liste != null) {
+                foreach ($liste as $sortie) {
+                    if ($sortie instanceof Sortie) {
+                        $listeId->push($sortie->getIdSortie());
+                    }
+                }
+            }
+
+
+            $qb->setParameter('ids', array_values($listeId))
+                ->andWhere('s.idSortie IN (:ids)');
         }
 
         if ($findSortie->isPasinscrit()) {

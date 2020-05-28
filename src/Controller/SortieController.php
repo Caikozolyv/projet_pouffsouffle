@@ -7,6 +7,7 @@ use App\Entity\FindSortie;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\LieuType;
 use App\Form\SearchSortieType;
 use App\Form\SortieType;
@@ -32,8 +33,8 @@ class SortieController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
-        $searchSortie = new FindSortie();
-        $form= $this->createForm(SearchSortieType::class, $searchSortie);
+        $findSortie = new FindSortie();
+        $form= $this->createForm(SearchSortieType::class, $findSortie);
         $form->handleRequest($request);
 
         $user =$this->getUser();
@@ -43,15 +44,16 @@ class SortieController extends AbstractController
         if ($form->isSubmitted()) {
 
            // dump($request->get('name'));
-           // dump($form->getData());
-            //die();
-
-            return $this->redirectToRoute('sortie_index',[
-            //'sorties' => $sortieRepository->notre requete sql(),
+           // $form->getData();
+            // die();
+            $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
+            return $this->render('sortie/index.html.twig',[
+                'form'=>$form->createView(),
+                'sorties' => $laListe,
             ]);
         }
      //   $searchSortie->setName('MacDo');
-        $laListe = $sortieRepository->findAllBySearch($searchSortie, $participant);
+        $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
 
         return $this->render('sortie/index.html.twig', [
             'form'=> $form->createView(),
