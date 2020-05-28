@@ -3,24 +3,25 @@
 {% block title %}Campus index{% endblock %}
 
 {% block body %}
-    <h1>Campus index</h1>
+    <h1 class="text-center">Gérer les campus</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>IdCampus</th>
+
                 <th>Nom</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for campu in campuses %}
+        {% for campus in campus %}
             <tr>
-                <td>{{ campu.idCampus }}</td>
-                <td>{{ campu.nom }}</td>
+
+                <td>{{ campus.nom }}</td>
                 <td>
-                    <a href="{{ path('campus_show', {'idCampus': campu.idCampus}) }}">show</a>
-                    <a href="{{ path('campus_edit', {'idCampus': campu.idCampus}) }}">edit</a>
+                    <a href="{{ path('campus_edit', {'idCampus': campus.id}) }}">Modifier</a>
+                    <a href="{{ path('campus_delete', {'idCampus': campus.id}) }}">Supprimer</a>
+
                 </td>
             </tr>
         {% else %}
