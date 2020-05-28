@@ -6,7 +6,6 @@ use App\Entity\Sortie;
 use App\Entity\Lieu;
 use App\Entity\Campus;
 use App\Entity\Ville;
-use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -83,12 +82,12 @@ class SortieType extends AbstractType
 
     protected function addElements(FormInterface $form, Ville $ville = null, Lieu $lieu = null)
     {
-        dump($ville);
+//        dump($ville);
         $lieux = array();
         $lieuSelected = new Lieu();
 
         if ($ville) {
-            $lr = $this->em->getRepository('LieuRepository');
+            $lr = $this->em->getRepository(Lieu::class);
             $lieux = $lr->createQueryBuilder('q')
                 ->andWhere("q.ville = :villeId")
                 ->setParameter("villeId", $ville->getId())
@@ -97,7 +96,7 @@ class SortieType extends AbstractType
         }
 
         if ($lieu) {
-            $lr = $this->em->getRepository('LieuRepository');
+            $lr = $this->em->getRepository(Lieu::class);
             $lieuSelected = $lr->createQueryBuilder('q')
                 ->andWhere("q.idLieu = :lieuId")
                 ->setParameter("lieuId", $lieu->getIdLieu())
@@ -135,15 +134,17 @@ class SortieType extends AbstractType
 
     }
 
-    function onPreSubmit(FormEvent $event, VilleRepository $vr)
+    function onPreSubmit(FormEvent $event)
     {
         $form = $event->getForm();
         $data = $event->getData();
+        dump($data);
 
-        $ville = $vr->find($data['ville']);
-        dump($ville);
+        $ville = $this->em->getRepository(Ville::class)->find($data['ville']);
+        $lieu = $this->em->getRepository(Lieu::class)->find($data['lieu']);
+//        dump($lieu);
 
-        $this->addElements($form, $ville);
+        $this->addElements($form, $ville, $lieu);
     }
 
     function onPreSetData(FormEvent $event)
