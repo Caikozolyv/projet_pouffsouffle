@@ -171,7 +171,7 @@ class SortieController extends AbstractController
             $complet = true;
         }
 
-        if ($sortie->getDateLimiteInscription() > $dateDuJour) {
+        if ($sortie->getDateLimiteInscription() < $dateDuJour) {
             $inscriptionFinale = +1;
         } else {
             $dateLimite = true;
