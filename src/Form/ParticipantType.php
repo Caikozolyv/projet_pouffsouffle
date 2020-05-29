@@ -17,10 +17,10 @@ class ParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('imageProfil', FileType::class,[
-                'label'=>'Image de profil',
-                'required'=>false
-            ])
+//            ->add('imageProfil', FileType::class,[
+//                'label'=>'Image de profil',
+//                'required'=>false
+//            ])
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
