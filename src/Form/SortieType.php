@@ -62,9 +62,9 @@ class SortieType extends AbstractType
                 ]
             ])
             ->add('campus', EntityType::class, [
-                'attr' => [
-                    'readonly' => true
-                ],
+//                'attr' => [
+//                    'disabled' => true
+//                ],
                 'class' => Campus::class,
                 'label' => "Campus",
                 'query_builder' => function (EntityRepository $repository) {
@@ -159,7 +159,9 @@ class SortieType extends AbstractType
     {
         $form = $event->getForm();
         $ville = $form->get('ville')->getData() ? $form->get('ville')->getData() : null;
-//        $lieu = $form->get('lieu')->getData() ? $form->get('lieu')->getData() : null;
+//        if($form->get('lieu')) {
+//            $lieu = $form->get('lieu')->getData() ? $form->get('lieu')->getData() : null;
+//        }
         $this->addElements($form, $ville, null);
     }
 
