@@ -42,8 +42,6 @@ class Sortie
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\GreaterThan("today",message="Tu ne peux pas instaurer une date limite d'inscription avant la date d'aujourd'hui !")
-     * @Assert\LessThan(propertyPath="dateHeureDebut", message="Ne peut pas dépasser la date de début de votre sortie !")
      */
 
     private $dateLimiteInscription;

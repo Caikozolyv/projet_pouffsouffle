@@ -3,8 +3,9 @@
 {% block title %}Campus index{% endblock %}
 
 {% block body %}
+    <br>
     <h1 class="text-center">Gérer les campus</h1>
-
+    <br>
     <table class="table">
         <thead>
             <tr>
@@ -18,6 +19,7 @@
             <tr>
 
                 <td>{{ campus.nom }}</td>
+
                 <td>
                     <a href="{{ path('campus_edit', {'idCampus': campus.id}) }}">Modifier</a>
                     <a href="{{ path('campus_delete', {'idCampus': campus.id}) }}">Supprimer</a>
