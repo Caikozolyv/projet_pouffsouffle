@@ -40,10 +40,16 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $participant = new Participant($user);
 
+       //$findSortie->setName(null);
+        //$findSortie->setPremiereDate(null);
+       // $findSortie->setDeuxiemeDate(null);
+       // $findSortie->setCampus(null);
+
+
+
 
         if ($form->isSubmitted()) {
-            /*dump($findSortie);
-            die();*/
+
 
             $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
             return $this->render('sortie/index.html.twig', [
@@ -52,8 +58,14 @@ class SortieController extends AbstractController
             ]);
         }
         //   $searchSortie->setName('MacDo');
-        $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
+        if($findSortie->getName() != null){
 
+
+        $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
+        }
+        else {
+            $laListe = $sortieRepository->findAll();
+        }
         return $this->render('sortie/index.html.twig', [
             'form' => $form->createView(),
             'sorties' => $laListe,
@@ -61,7 +73,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
+     * @Route("/ajax/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
      * @param Request $request
      * @return JsonResponse
      */
