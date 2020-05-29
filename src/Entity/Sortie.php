@@ -18,13 +18,11 @@ class Sortie
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-
     private $idSortie;
 
     /**
      * @ORM\Column(type="string", length=150)
      */
-
     private $name;
 
     /**
@@ -37,34 +35,27 @@ class Sortie
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-
     private $duree;
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\GreaterThan("today",message="Tu ne peux pas instaurer une date limite d'inscription avant la date d'aujourd'hui !")
-     * @Assert\LessThan(propertyPath="dateHeureDebut", message="Ne peut pas dépasser la date de début de votre sortie !")
      */
-
     private $dateLimiteInscription;
 
     /**
      * @ORM\Column(type="integer")
      */
-
     private $nbInscriptionMax;
 
     /**
      * @ORM\Column(type="string", length=300)
      */
-
     private $infosSortie;
 
     /**
      * @ORM\Column(type="string", length=150)
      * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="listeSorties")
      */
-
     private $etat;
 
     /**
