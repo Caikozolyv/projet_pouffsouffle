@@ -29,8 +29,8 @@
                 <td>{{ sortie.infosSortie }}</td>
                 <td>{{ sortie.etat }}</td>
                 <td>
-                    <a href="{{ path('sortie_show', {'idSortie': sortie.idSortie}) }}">Afficher</a><br>
-                    <a href="#" data-toggle="modal" data-target="#baseModal">Se désinscrire</a>
+                    <a class="btn btn-primary" href="{{ path('sortie_show', {'idSortie': sortie.idSortie}) }}">Afficher</a><br>
+                    <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#baseModal">Se désinscrire</a>
                     <div class="modal" id="baseModal" style="width: 600px;position: absolute;top: 32%; left: 31%;">
                         <form action="{{ path('sortie_desinscrire', {'idSortie': sortie.idSortie}) }}" tabindex="-1">
                             <div class="modal-content">
