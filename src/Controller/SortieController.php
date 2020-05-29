@@ -11,13 +11,13 @@ use App\Form\SortieType;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/sortie")
@@ -40,10 +40,16 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $participant = new Participant($user);
 
+       //$findSortie->setName(null);
+        //$findSortie->setPremiereDate(null);
+       // $findSortie->setDeuxiemeDate(null);
+       // $findSortie->setCampus(null);
+
+
+
 
         if ($form->isSubmitted()) {
-            /*dump($findSortie);
-            die();*/
+
 
             $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
             return $this->render('sortie/index.html.twig', [
@@ -52,8 +58,14 @@ class SortieController extends AbstractController
             ]);
         }
         //   $searchSortie->setName('MacDo');
-        $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
+        if($findSortie->getName() != null){
 
+
+        $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
+        }
+        else {
+            $laListe = $sortieRepository->findAll();
+        }
         return $this->render('sortie/index.html.twig', [
             'form' => $form->createView(),
             'sorties' => $laListe,
@@ -61,7 +73,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
+     * @Route("/ajax/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -139,7 +151,7 @@ class SortieController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
-
+            $this->addFlash("success", "Sortie créée avec succès ! ");
             return $this->redirectToRoute('sortie_index');
 
         }
@@ -151,40 +163,45 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/inscire/{idSortie}", name="sortie_inscrire", methods={"GET","POST"})
+     * @Route("/inscrire/{idSortie}", name="sortie_inscrire", methods={"GET","POST"})
      * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param $idSortie
+     * @param SortieRepository $sr
      * @return Response
      */
-    public function inscire(Request $request, EntityManagerInterface $em, $idSortie, SortieRepository $sr): Response
+    public function inscrire(Request $request, EntityManagerInterface $em, $idSortie, SortieRepository $sr): Response
     {
         $user = $this->getUser();
         $sortie = $sr->find($idSortie);
-        $dateDuJour = new Date();
+        $dateDuJour = new DateTime('now');
         $inscrit = false;
         $complet = false;
         $dateLimite = false;
+
         $inscriptionFinale = 0;
 
-        if ($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())) {
-            $inscriptionFinale = +1;
-        } else {
-            $complet = true;
-        }
+            if ($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())) {
+                $inscriptionFinale = +1;
+            } else {
+                $complet = true;
+            }
 
-        if ($sortie->getDateLimiteInscription() < $dateDuJour) {
-            $inscriptionFinale = +1;
-        } else {
-            $dateLimite = true;
-        }
+            if ($sortie->getDateLimiteInscription() > $dateDuJour) {
+                $inscriptionFinale = $inscriptionFinale+1;
+            } else {
+                $dateLimite = true;
+            }
 
-        if ($inscriptionFinale == 2) {
-            $sortie->addParticipant($user);
-            $em->flush();
-            $inscrit = true;
-            return $this->render('sortie/inscrisSucces.html.twig', [
-                'sortie' => $sortie,
-                'inscrit' => $inscrit]);
-        }
+            if ($inscriptionFinale == 2) {
+                $sortie->addParticipant($user);
+                $em->flush();
+                $inscrit = true;
+                return $this->render('sortie/inscrisSucces.html.twig', [
+                    'sortie' => $sortie,
+                    'inscrit' => $inscrit]);
+            }
+
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
             'inscrit' => $inscrit,
@@ -294,7 +311,7 @@ class SortieController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $dateDuJour = new \DateTime();
+        $dateDuJour = new \DateTime('now');
 
         $repoSorties = $this->getDoctrine()->getManager()->getRepository(Sortie::class);
 

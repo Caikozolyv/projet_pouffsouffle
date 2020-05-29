@@ -18,13 +18,11 @@ class Sortie
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-
     private $idSortie;
 
     /**
      * @ORM\Column(type="string", length=150)
      */
-
     private $name;
 
     /**
@@ -37,32 +35,27 @@ class Sortie
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-
     private $duree;
 
     /**
      * @ORM\Column(type="date")
      */
-
     private $dateLimiteInscription;
 
     /**
      * @ORM\Column(type="integer")
      */
-
     private $nbInscriptionMax;
 
     /**
      * @ORM\Column(type="string", length=300)
      */
-
     private $infosSortie;
 
     /**
      * @ORM\Column(type="string", length=150)
      * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="listeSorties")
      */
-
     private $etat;
 
     /**

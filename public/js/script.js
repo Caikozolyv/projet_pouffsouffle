@@ -19,6 +19,10 @@ $ville.change(function () {
             $.each(lieux, function (key, value) {
                 lieu.append('<option value="' + value.id + '">' + value.name + '</option>')
             });
+        },
+        error:function (xhr,ajaxOptions, thrownError) {
+        alert(xhr.responseText);
+        alert(thrownError);
         }
     });
 });
