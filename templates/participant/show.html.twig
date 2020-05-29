@@ -3,14 +3,14 @@
 {% block title %}Sortir.com - Mon profil{% endblock %}
 
 {% block body %}
-    <h1>Mon Profil</h1>
+    <h1>{{ participant.username }}</h1>
 
     <table class="table">
         <tbody>
-        <tr>
-            <th>Image de profil</th>
-            <td>{{ participant.imageProfil }}</td>
-        </tr>
+{#        <tr>#}
+{#            <th>Image de profil</th>#}
+{#            <td>{{ participant.imageProfil }}</td>#}
+{#        </tr>#}
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>

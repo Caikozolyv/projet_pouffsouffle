@@ -139,7 +139,7 @@ class SortieController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
-
+            $this->addFlash("success", "Sortie créée avec succès ! ");
             return $this->redirectToRoute('sortie_index');
 
         }
