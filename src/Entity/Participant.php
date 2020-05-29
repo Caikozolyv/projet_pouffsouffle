@@ -68,10 +68,10 @@ class Participant implements UserInterface
      */
     private $actif;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $imageProfil;
+//    /**
+//     * @ORM\Column(type="string")
+//     */
+//    private $imageProfil;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="organisateur")
