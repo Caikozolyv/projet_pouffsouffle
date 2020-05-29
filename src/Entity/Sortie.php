@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -27,19 +28,22 @@ class Sortie
     private $name;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("today", message="Tu ne peux pas créer une sortie avant la date d'aujourd'hui !")
+     * @Assert\LessThan("2030-06-01 00:00:00",message="Ce sera la fin du monde, ça sert à rien !")
      */
-
     private $dateHeureDebut;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
 
     private $duree;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\GreaterThan("today",message="Tu ne peux pas instaurer une date limite d'inscription avant la date d'aujourd'hui !")
+     * @Assert\LessThan(propertyPath="dateHeureDebut", message="Ne peut pas dépasser la date de début de votre sortie !")
      */
 
     private $dateLimiteInscription;

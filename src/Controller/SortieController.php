@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Campus;
+use App\Entity\Etat;
 use App\Entity\FindSortie;
-use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
-use App\Entity\Ville;
-use App\Form\LieuType;
 use App\Form\SearchSortieType;
 use App\Form\SortieType;
+use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,32 +32,71 @@ class SortieController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
+        $this->updateAllSorties();
         $findSortie = new FindSortie();
-        $form= $this->createForm(SearchSortieType::class, $findSortie);
+        $form = $this->createForm(SearchSortieType::class, $findSortie);
         $form->handleRequest($request);
 
-        $user =$this->getUser();
+        $user = $this->getUser();
         $participant = new Participant($user);
 
 
         if ($form->isSubmitted()) {
+            /*dump($findSortie);
+            die();*/
 
-           // dump($request->get('name'));
-           // $form->getData();
-            // die();
             $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
-            return $this->render('sortie/index.html.twig',[
-                'form'=>$form->createView(),
+            return $this->render('sortie/index.html.twig', [
+                'form' => $form->createView(),
                 'sorties' => $laListe,
             ]);
         }
-     //   $searchSortie->setName('MacDo');
+        //   $searchSortie->setName('MacDo');
         $laListe = $sortieRepository->findAllBySearch($findSortie, $participant);
 
         return $this->render('sortie/index.html.twig', [
-            'form'=> $form->createView(),
+            'form' => $form->createView(),
             'sorties' => $laListe,
         ]);
+    }
+
+    /**
+     * @Route("/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function selectVille(Request $request, LieuRepository $lr)
+    {
+        $idVille = $request->get('villeId');
+        $lieux = $lr->findLieuxByVilleId($idVille);
+        $tabLieux = array();
+
+        foreach ($lieux as $lieu) {
+            $tabLieux[] = array(
+                "id" => $lieu->getIdLieu(),
+                "name" => $lieu->getNomLieu()
+            );
+        }
+        return new JsonResponse($tabLieux);
+    }
+
+    /**
+     * @Route("/selectLieu", name="sortie_select_lieu", methods={"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function selectLieu(Request $request, LieuRepository $lr)
+    {
+        $idLieu = $request->get('lieuId');
+        $lieu = $lr->find($idLieu);
+
+        $tabLieu[] = array(
+            "id" => $lieu->getIdLieu(),
+            "rue" => $lieu->getRue(),
+            "latitude" => $lieu->getLatitude(),
+            "longitude" => $lieu->getLongitude()
+        );
+        return new JsonResponse($tabLieu);
     }
 
     /**
@@ -67,50 +105,46 @@ class SortieController extends AbstractController
     public function new(Request $request): Response
     {
         $sortie = new Sortie();
-        $lieu = new Lieu();
-        $campus = new Campus();
-        $ville = new Ville();
 
+        //Ligne rajout Victor pour Etat
+        $etatController = new EtatController();
 
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            dump($sortie);
             $sortie->setName($sortie->getName());
             $sortie->setDateHeureDebut($sortie->getDateHeureDebut());
             $sortie->setDateLimiteInscription($sortie->getDateLimiteInscription());
             $sortie->setNbInscriptionMax($sortie->getNbInscriptionMax());
             $sortie->setDuree($sortie->getDuree());
             $sortie->setInfosSortie($sortie->getInfosSortie());
-
-            $campus->setNom($campus->getName());
-
-            $lieu->setNomLieu($lieu->getNomLieu());
-            $lieu->setRue($lieu->getNomLieu());
-            $lieu->setLatitude($lieu->getLatitude());
-            $lieu->setLongitude($lieu->getLongitude());
+            $sortie->setCampus($sortie->getCampus());
+            $sortie->setLieu($sortie->getLieu());
 
             //Ville ne marche toujours pas, tralalalalala
-            $ville->setNomVille($ville->getNomVille());
+//            $ville->setNomVille($ville->getNomVille());
+
+            //Lignes ajout Victor pour Etat
+//            $repoEtats = $etatController->getDoctrine()->getManager()->getRepository();
+//            $ouverte = $repoEtats->find(2);
+//            $sortie->setEtat($ouverte);
+//            $ouverte = $repoEtats->find(2);
+
+            //je l'ai mis en dur en attendant parce que ce qu'il y a au dessus ne fonctionne pas
+            //bonne nuit !
+            $sortie->setEtat('ouverte');
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('sortie');
-
-            //La création ne marche pas :(
-
-
+            return $this->redirectToRoute('sortie_index');
 
         }
 
         return $this->render('sortie/new.html.twig', [
-
-            //Je ne sais pas où le mettre car ici il ne veut pas pourquoi??
-            //'sortie' => $sortieRepository->findSortie(),
-
             'sortie' => $sortie,
             'form' => $form->createView(),
         ]);
@@ -131,33 +165,31 @@ class SortieController extends AbstractController
         $dateLimite = false;
         $inscriptionFinale = 0;
 
-        if($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())){
-            $inscriptionFinale=+1;
-        }
-        else{
+        if ($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants())) {
+            $inscriptionFinale = +1;
+        } else {
             $complet = true;
         }
 
-        if($sortie->getDateLimiteInscription() > $dateDuJour){
-            $inscriptionFinale=+1;
-        }
-        else{
+        if ($sortie->getDateLimiteInscription() < $dateDuJour) {
+            $inscriptionFinale = +1;
+        } else {
             $dateLimite = true;
         }
 
-        if($inscriptionFinale == 2){
+        if ($inscriptionFinale == 2) {
             $sortie->addParticipant($user);
             $em->flush();
             $inscrit = true;
             return $this->render('sortie/inscrisSucces.html.twig', [
                 'sortie' => $sortie,
-                'inscrit'=> $inscrit]);
+                'inscrit' => $inscrit]);
         }
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
-            'inscrit'=> $inscrit,
-            'complet'=>$complet,
-            'dateLimite'=>$dateLimite
+            'inscrit' => $inscrit,
+            'complet' => $complet,
+            'dateLimite' => $dateLimite
         ]);
 
     }
@@ -165,7 +197,8 @@ class SortieController extends AbstractController
     /**
      * @Route("/desinscrire/{idSortie}", name="sortie_desinscrire", methods={"GET","POST"})
      */
-    public function desinscrire(Sortie $sortie, EntityManagerInterface $em, $idSortie, SortieRepository $sr) {
+    public function desinscrire(Sortie $sortie, EntityManagerInterface $em, $idSortie, SortieRepository $sr)
+    {
         $user = $this->getUser();
         $sortie = $sr->find($idSortie);
         $sortie->removeParticipant($user);
@@ -173,7 +206,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/inscrisSucces.html.twig', [
             'sortie' => $sortie,
-            'inscrit'=>false]);
+            'inscrit' => false]);
     }
 
     /**
@@ -190,7 +223,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-        /**
+    /**
      * @Route("/{idSortie}", name="sortie_show", methods={"GET"})
      * @param Sortie $sortie
      * @return Response
@@ -204,7 +237,7 @@ class SortieController extends AbstractController
         $userId = $user->getIdParticipant();
         $userSorties = $sr->findAllByUser($userId);
         foreach ($userSorties as $s) {
-            if($s->getIdSortie() == $idSortie) {
+            if ($s->getIdSortie() == $idSortie) {
                 $inscrit = true;
                 break;
             }
@@ -246,7 +279,7 @@ class SortieController extends AbstractController
      */
     public function delete(Request $request, Sortie $sortie): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$sortie->getIdSortie(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $sortie->getIdSortie(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sortie);
             $entityManager->flush();
@@ -255,26 +288,51 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_index');
     }
 
-    public function updateAllSorties(EntityManagerInterface $em)
+    /**
+     */
+    public function updateAllSorties()
     {
-        $etat = new EtatController();
+        $em = $this->getDoctrine()->getManager();
 
         $dateDuJour = new \DateTime();
 
-        $repoSorties = $this->getDoctrine()->getManager()->getRepository();
-        $repoEtats = $etat->getDoctrine()->getManager()->getRepository();
+        $repoSorties = $this->getDoctrine()->getManager()->getRepository(Sortie::class);
 
-        $lesEtats = $repoEtats->findAll();
         $lesSorties = $repoSorties->findAll();
 
-        foreach ($lesSorties as $sortie){
-            if($sortie instanceof Sortie)
-            {
-                if($sortie->getDateHeureDebut() > $dateDuJour){
-                    $sortie->setEtat();
-                }
+        foreach ($lesSorties as $sortie) {
+            if ($sortie instanceof Sortie) {
+                if ($sortie->getEtat() != "Activité annulée") {
 
+
+                    $dateFinSortie = new \DateTime();
+                    $dateFinSortie->setTimestamp($sortie->getDateHeureDebut()->getTimeStamp() + ($sortie->getDuree()*3600) + 3600);
+
+
+                    if ($sortie->getEtat() == null) {
+                        $sortie->setEtat("Ouverte");
+                    }
+                    if ($sortie->getNbInscriptionMax() > count($sortie->getListeParticipants()) &&
+                        $sortie->getEtat() == "Clôturée") {
+                        $sortie->setEtat("Ouverte");
+                    }
+                    if ($sortie->getNbInscriptionMax() == count($sortie->getListeParticipants()) &&
+                        $sortie->getEtat() == "Ouverte") {
+                        $sortie->setEtat("Clôturée");
+                    }
+
+                    if ($sortie->getDateHeureDebut() > $dateDuJour && $dateFinSortie < $dateDuJour &&
+                        ($sortie->getEtat() == "Ouverte" || $sortie->getEtat() == "Clôturée")) {
+                        $sortie->setEtat("Activité en cours");
+                    }
+                    if ($dateFinSortie > $dateDuJour &&
+                        $sortie->getEtat() == "Activité en cours") {
+                        $sortie->setEtat("Activité passée");
+                    }
+                    $em->persist($sortie);
+                }
             }
+            $em->flush();
         }
     }
 }

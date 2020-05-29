@@ -6,8 +6,10 @@
     <h1 class="text-center">Créer une sortie</h1>
 
     <div class="container">
+        <form action="{{ path('sortie_new')}}" method="POST">
         <div class="row">
             <div class="col">
+{#                {{ form_start(form, {'action': "{{ path('sortie_new')}}", 'method' : 'GET'}) }}#}
                 {{ form_row(form.name) }}
                 {{ form_row(form.dateHeureDebut) }}
                 {{ form_row(form.dateLimiteInscription) }}
@@ -21,48 +23,33 @@
 
                 {{ form_row(form.campus) }}
 
-                <div class="text-type">
-                    <label for="ville">Ville</label>
-                    <input type="text" class="text-type" id="ville">
-                </div>
-
-                {#Je n'arrive pas à afficher la liste des villes#}
-                {#{{ form_row(form.ville) }}#}
+                {{ form_row(form.ville) }}
 
                 {{ form_row(form.lieu) }}
 
-                <div class="text-type">
-                    <label for="rue">Rue</label>
-                    <input type="text" class="text-type" id="rue">
-                </div>
+                {{ form_row(form.rue) }}
 
-                <div class="text-type">
-                    <label for="codePostal">Code Postal</label>
-                    <input type="text" class="text-type" id="codePostal">
-                </div>
+                {{ form_row(form.latitude) }}
 
-                <div class="text-type">
-                    <label for="latitude">Latitude</label>
-                    <input type="text" class="text-type" id="latitude">
-                </div>
-
-                <div class="text-type">
-                    <label for="longitude">Longitude</label>
-                    <input type="text" class="text-type" id="longitude">
-                </div>
+                {{ form_row(form.longitude) }}
             </div>
         </div>
-    </div>
+{#    </div>#}
 
     <div class="text-center">
 
-        <button type="submit">Enregistrer</button>
+{#        <button type="submit">Enregistrer</button>#}
 
-        <button type="submit">Publier la sortie</button>
+        <input type="submit" class="btn btn-success" name="Publier la sortie">
+        <a class="btn btn-danger" href="{{ path('sortie_index') }}">Annuler</a>
 
-        <button type="submit">Annuler</button>
-
+    </div>
+            {{ form_rest(form) }}
+    </form>
     </div>
     {# <a href="{{ path('sortie_index') }}">back to list</a> #}
 
+{% endblock %}
+{% block script %}
+    <script src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
