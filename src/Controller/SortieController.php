@@ -61,7 +61,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
+     * @Route("/ajax/selectVille", name="sortie_select_ville", methods={"GET", "POST"})
      * @param Request $request
      * @return JsonResponse
      */

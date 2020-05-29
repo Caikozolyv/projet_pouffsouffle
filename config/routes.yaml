@@ -6,10 +6,10 @@ ajax_ville:
   path: /ajax/selectVille
   defaults: { _controller: 'App\Controller\SortieController::selectVille' }
   requirements:
-    _method:  GET
+    _method: GET
 
 ajax_lieu:
   path: /ajax/selectLieu
   defaults: { _controller: 'App\Controller\SortieController::selectLieu' }
   requirements:
-    _method:  GET
+    _method: GET
